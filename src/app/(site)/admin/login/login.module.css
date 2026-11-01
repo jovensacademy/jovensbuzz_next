@@ -1,0 +1,64 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  background: var(--surface-muted);
+}
+.panel {
+  display: grid;
+  align-content: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 440px;
+  margin-inline: auto;
+  padding: 48px 24px;
+}
+.heading {
+  display: grid;
+  gap: 8px;
+}
+.heading h1 {
+  font-size: 1.875rem;
+}
+.heading p {
+  color: var(--ink-500);
+}
+.secure {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: var(--ink-400);
+}
+.aside {
+  background:
+    url("/images/footer-brand-mark.png") no-repeat right -60px bottom -40px / 70% auto,
+    linear-gradient(150deg, var(--ink-900), var(--ink-700));
+  color: #fff;
+  display: grid;
+  align-content: end;
+  padding: 56px;
+}
+.asideInner {
+  display: grid;
+  gap: 12px;
+  max-width: 420px;
+}
+.asideTitle {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.asideText {
+  color: #c9d0dd;
+}
+
+@media (max-width: 860px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+  .aside {
+    display: none;
+  }
+}

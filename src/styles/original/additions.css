@@ -1,0 +1,409 @@
+/* Additions to the original stylesheet for the contact-form enhancements.
+   Kept separate so style.css stays a verbatim copy of the approved design. */
+
+/* ---------- Custom dropdowns (country selector + "How Can We Help You?") ---------- */
+/* Desktop values are unchanged from the original country selector; phones get a slightly
+   more compact list (see the max-width: 575.98px block). */
+.jb-phone,
+.jb-dropdown { position: relative; }
+
+.jb-phone__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: max(6px, calc(8 * var(--u)));
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.jb-phone__flag { flex: none; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08); }
+.jb-phone__trigger-iso { font-weight: 600; font-size: .85em; color: #6b7280; }
+.jb-phone__trigger-dial { font-weight: 600; color: #111827; }
+
+/* Service trigger keeps the original select look (border, radius, chevron) */
+.jb-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+.jb-dropdown__trigger:disabled { cursor: progress; opacity: .75; }
+.jb-dropdown__value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jb-dropdown__trigger.is-placeholder .jb-dropdown__value { color: #374151; }
+
+.jb-dropdown__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #f3f4f6;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(17, 24, 39, .14);
+  transform-origin: top left;
+  animation: jbDropdownIn .16s cubic-bezier(.22, 1, .36, 1);
+}
+.jb-dropdown__list.is-closing { animation: jbDropdownOut .14s ease-in forwards; pointer-events: none; }
+.jb-phone__list { width: min(340px, calc(100vw - 48px)); }
+.jb-dropdown__list--full {
+  right: 0;
+  max-height: 320px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.jb-dropdown__option {
+  display: grid;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 17px;
+  color: #1f2937;
+  cursor: pointer;
+  user-select: none;
+}
+.jb-dropdown__option + .jb-dropdown__option { margin-top: 2px; }
+.jb-phone__option { grid-template-columns: auto 1fr auto 18px; }
+.jb-dropdown__option--service { grid-template-columns: 1fr 18px; color: #0b1730; }
+.jb-dropdown__option.is-active { background: #fff6ee; }
+.jb-dropdown__option.is-selected { background: #fde3cd; font-weight: 600; }
+.jb-phone__option.is-selected { color: #9a3d06; }
+.jb-dropdown__option--service.is-selected { color: #0b1730; }
+.jb-dropdown__label { overflow-wrap: anywhere; }
+.jb-phone__chip {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: #fde7d6;
+  color: #9a3d06;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+.jb-phone__option.is-selected .jb-phone__chip { background: #fbd5b5; }
+.jb-phone__dial { color: #6b7280; font-variant-numeric: tabular-nums; }
+.jb-phone__option.is-selected .jb-phone__dial { color: #9a3d06; }
+.jb-dropdown__check { color: #f4761f; display: inline-flex; }
+
+@keyframes jbDropdownIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } }
+@keyframes jbDropdownOut { to { opacity: 0; transform: translateY(-4px) scale(.98); } }
+
+/* Phones: subtly more compact lists that always stay inside the viewport */
+@media (max-width: 575.98px) {
+  .jb-phone__trigger-iso { display: none; }
+  /* Narrower phone-country list — stays well inside the viewport on 375 px screens */
+  .jb-phone__list { width: min(270px, calc(100vw - 56px)); }
+  /* Full-width service list must never overflow the viewport horizontally */
+  .jb-dropdown__list--full { right: auto; max-width: calc(100vw - 32px); }
+  .jb-dropdown__list { padding: 6px; border-radius: 14px; top: calc(100% + 5px); }
+  /* Slightly reduced max-height so the list fits on shorter phones without scrolling past the fold */
+  .jb-dropdown__list--full { max-height: 236px; }
+  .jb-dropdown__option { gap: 8px; padding: 8px 10px; border-radius: 9px; font-size: 14.5px; }
+  .jb-phone__chip { min-width: 28px; padding: 2px 4px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jb-dropdown__list,
+  .jb-dropdown__list.is-closing { animation: none; }
+}
+
+.jb-inline-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #c35b00;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---------- Success modal ("Your Buzz Starts Here.") ---------- */
+.jb-success-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.jb-success-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 12, 8, .55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: jbFadeIn .2s ease-out;
+}
+.jb-success-modal__dialog {
+  position: relative;
+  width: min(550px, 100%);
+  padding: 40px 40px 40px;
+  border: 1.5px solid #f6a76b;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+  text-align: center;
+  font-family: var(--font-epilogue), "Epilogue", "Sora", system-ui, sans-serif;
+  animation: jbPopIn .28s cubic-bezier(.22, 1, .36, 1);
+}
+.jb-success-modal__icon {
+  display: grid;
+  place-items: center;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: #fde3d2;
+}
+.jb-success-modal__icon span {
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: #f4761f;
+  box-shadow: 0 8px 20px rgba(244, 118, 31, .35);
+}
+.jb-success-modal__title {
+  margin: 0 0 14px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #1d1d1d;
+}
+.jb-success-modal__text {
+  max-width: 400px;
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #6b6560;
+}
+.jb-success-modal__close {
+  display: block;
+  width: 100%;
+  margin-top: 30px;
+  min-height: 70px;
+  border: 0;
+  border-radius: 999px;
+  background: #f4761f;
+  color: #fff;
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color .2s ease, transform .2s ease;
+}
+.jb-success-modal__close:hover { background: #e2661a; }
+.jb-success-modal__close:active { transform: scale(.99); }
+.jb-success-modal__close:focus-visible { outline: 3px solid rgba(244, 118, 31, .45); outline-offset: 3px; }
+
+@media (max-width: 575.98px) {
+  .jb-success-modal__dialog { padding: 32px 22px 24px; border-radius: 24px; }
+  .jb-success-modal__icon { width: 92px; height: 92px; }
+  .jb-success-modal__icon span { width: 66px; height: 66px; }
+  .jb-success-modal__title { font-size: 25px; }
+  .jb-success-modal__text { font-size: 16px; }
+  .jb-success-modal__close { min-height: 58px; font-size: 20px; }
+}
+
+@keyframes jbFadeIn { from { opacity: 0; } }
+@keyframes jbPopIn { from { opacity: 0; transform: translateY(12px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) {
+  .jb-success-modal__backdrop,
+  .jb-success-modal__dialog { animation: none; }
+}
+
+/* ---------- Premium Contact Popup Modal ---------- */
+.jb-contact-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.jb-contact-popup__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 10, 16, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: jbFadeIn 0.3s ease-out;
+}
+
+.jb-contact-popup__dialog {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1040px;
+  max-height: min(880px, 92vh);
+  background: #ffffff;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  animation: jbPopupIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-sora), "Sora", system-ui, sans-serif;
+}
+
+/* Close button - circular white floating badge matching reference */
+.jb-contact-popup__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.jb-contact-popup__close:hover {
+  transform: scale(1.08);
+  background: #ff5500;
+  color: #ffffff;
+  border-color: #ff5500;
+  box-shadow: 0 6px 20px rgba(255, 85, 0, 0.35);
+}
+.jb-contact-popup__close:focus-visible {
+  outline: 3px solid rgba(255, 85, 0, 0.5);
+  outline-offset: 2px;
+}
+.jb-contact-popup__close svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+/* Left announcement banner */
+.jb-contact-popup__banner {
+  flex: 0 0 410px;
+  width: 410px;
+  max-width: 42%;
+  background: #0a0b10;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+}
+.jb-contact-popup__banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* Right contact form pane */
+.jb-contact-popup__form-pane {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 36px 40px;
+  background: #ffffff;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Form overrides inside popup */
+.jb-contact-popup__form-pane .contact-form-section-main__form {
+  padding: 0 !important;
+  max-width: 100%;
+}
+.jb-contact-popup__form-pane .contact-form-section-main__form-row {
+  --bs-gutter-x: 16px;
+  --bs-gutter-y: 16px;
+}
+.jb-contact-popup__form-pane .contact-form-section-main__label {
+  font-size: 15px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #111827;
+}
+.contact-form-section-main__label--req::after {
+  content: " *";
+  color: #ff5500;
+  font-weight: 700;
+}
+.jb-contact-popup__form-pane .contact-form-section-main__input,
+.jb-contact-popup__form-pane .contact-form-section-main__select {
+  height: 50px;
+  font-size: 15px;
+  border-radius: 12px;
+  border-color: #d1d5db;
+}
+.jb-contact-popup__form-pane .contact-form-section-main__textarea {
+  min-height: 96px;
+  height: 96px;
+}
+.jb-contact-popup__form-pane .contact-form-section-main__submit {
+  margin-top: 8px;
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Responsive behavior - Tablet & Mobile: 768px and below */
+@media (max-width: 768px) {
+  .jb-contact-popup {
+    padding: 12px;
+    align-items: center;
+  }
+  .jb-contact-popup__dialog {
+    flex-direction: column;
+    max-height: 94vh;
+    border-radius: 20px;
+  }
+  /* Requirement 5: Completely hide the left announcement image at 768px and below */
+  .jb-contact-popup__banner {
+    display: none !important;
+  }
+  .jb-contact-popup__form-pane {
+    padding: 36px 18px 24px;
+  }
+  .jb-contact-popup__close {
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+  }
+  .jb-contact-popup__form-pane .contact-form-section-main__submit {
+    max-width: 100%;
+  }
+}
+
+@keyframes jbPopupIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jb-contact-popup__backdrop,
+  .jb-contact-popup__dialog {
+    animation: none;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "jovens-buzz-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
+    "aos": "^2.3.4",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "libphonenumber-js": "^1.13.15",
+    "lucide-react": "^1.64.0",
+    "motion": "^11.18.2",
+    "next": "16.4.3",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.91.0",
+    "server-only": "^0.0.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
+    "@types/aos": "^3.0.8",
+    "@types/bootstrap": "^5.2.11",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "jsdom": "^30.1.3",
+    "typescript": "^5",
+    "vitest": "^3.2.7",
+    "vitest-axe": "^0.1.0"
+  }
+}

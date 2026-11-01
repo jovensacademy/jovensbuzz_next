@@ -1,0 +1,35 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--ink-900);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.03em;
+  display: inline-flex;
+  gap: 5px;
+}
+.accent {
+  color: var(--ink-900);
+  position: relative;
+}
+.accent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--brand-orange);
+  opacity: 0.85;
+  z-index: -1;
+}
+.light,
+.light .accent {
+  color: #fff;
+}

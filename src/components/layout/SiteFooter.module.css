@@ -1,0 +1,122 @@
+.footer {
+  background: var(--ink-900);
+  color: #c9d0dd;
+  padding-top: 72px;
+  position: relative;
+  overflow: hidden;
+}
+.footer::before {
+  content: "";
+  position: absolute;
+  right: -80px;
+  bottom: -60px;
+  width: 420px;
+  height: 380px;
+  background: url("/images/footer-brand-mark.png") no-repeat center / contain;
+  opacity: 0.06;
+  pointer-events: none;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.3fr 1.3fr;
+  gap: 40px;
+  padding-bottom: 48px;
+  position: relative;
+}
+.brand p {
+  margin-top: 18px;
+  max-width: 34ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+.column h2 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.column ul,
+.socials,
+.bottom ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.column li + li {
+  margin-top: 10px;
+}
+.column a,
+.bottom a {
+  color: #c9d0dd;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color 0.15s var(--ease);
+}
+.column a:hover,
+.bottom a:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contactList li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+.contactList svg {
+  color: var(--brand-orange);
+  flex-shrink: 0;
+}
+.socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+.socials a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  color: #fff;
+  transition: background-color 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+.socials a:hover {
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: var(--ink-900);
+}
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-block: 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  font-size: 0.875rem;
+  position: relative;
+}
+.bottom ul {
+  display: flex;
+  gap: 24px;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

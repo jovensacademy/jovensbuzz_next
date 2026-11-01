@@ -1,0 +1,119 @@
+/* Site footer — dark brown/black with a soft orange glow (matches the footer reference). */
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(32px, 3.6vw, 64px) clamp(20px, 7vw, 135px) clamp(24px, 2.6vw, 44px);
+  background:
+    radial-gradient(70% 120% at 100% 100%, rgba(150, 70, 12, 0.55) 0%, rgba(150, 70, 12, 0) 60%),
+    radial-gradient(45% 70% at 85% 0%, rgba(110, 50, 10, 0.18) 0%, rgba(110, 50, 10, 0) 70%),
+    #0b0604;
+  color: #f4efeb;
+  font-family: var(--font-sora), "Sora", system-ui, sans-serif;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(32px, 5vw, 96px);
+}
+.intro {
+  max-width: clamp(300px, 37vw, 540px);
+}
+.copyright {
+  margin: 0 0 clamp(14px, 1.6vw, 24px);
+  font-size: clamp(12px, 1.2vw, 16px);
+  color: #b9b1ab;
+}
+.description {
+  margin: 0;
+  font-size: clamp(16px, 1.7vw, 24px);
+  line-height: 1.35;
+  color: #f4efeb;
+}
+
+.columns {
+  display: flex;
+  flex: none;
+  gap: clamp(32px, 5vw, 72px);
+}
+.heading {
+  margin: 0 0 clamp(16px, 2.2vw, 32px);
+  font-family: inherit;
+  font-size: clamp(16px, 1.75vw, 24px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.list {
+  display: grid;
+  gap: clamp(12px, 1.55vw, 22px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.list a,
+.privacy {
+  color: #e9e3de;
+  font-size: clamp(14px, 1.55vw, 21px);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.list a:hover,
+.privacy:hover {
+  color: #f88d00;
+}
+.list a:focus-visible,
+.privacy:focus-visible,
+.logo:focus-visible {
+  outline: 2px solid #f88d00;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-top: clamp(48px, 6vw, 110px);
+}
+.logo {
+  display: inline-block;
+  line-height: 0;
+}
+.logo img {
+  width: clamp(170px, 25vw, 340px);
+  height: auto;
+}
+.privacy {
+  font-size: clamp(12px, 1.2vw, 16px);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Small tablets and phones: description and link columns stack */
+@media (max-width: 767.98px) {
+  .top {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .intro {
+    max-width: 560px;
+  }
+  .bottom {
+    margin-top: 48px;
+  }
+}
+
+/* Mobile: logo above the privacy link */
+@media (max-width: 575.98px) {
+  .columns {
+    gap: 40px;
+  }
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}

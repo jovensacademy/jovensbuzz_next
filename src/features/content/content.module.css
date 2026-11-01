@@ -1,0 +1,113 @@
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ink-900);
+}
+.serviceCell {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 640px;
+}
+.iconChip {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--ink-900);
+  color: var(--brand-orange);
+}
+.faqList {
+  list-style: none;
+  margin: -6px 0;
+  padding: 0;
+}
+.faqRow {
+  display: grid;
+  grid-template-columns: 32px 1fr auto auto;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.faqRow:last-child {
+  border-bottom: 0;
+}
+.order {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--surface-sunken);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.faqText p {
+  color: var(--ink-500);
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fieldset {
+  margin: 0;
+}
+.legend {
+  float: left;
+  width: 100%;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  padding: 0;
+  margin-bottom: 18px;
+}
+.contentGrid {
+  clear: both;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+.saveBar {
+  position: sticky;
+  bottom: 16px;
+  display: grid;
+  gap: 10px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  justify-items: end;
+}
+
+@media (max-width: 720px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+  .faqRow {
+    grid-template-columns: 28px 1fr;
+  }
+  .faqRow > :nth-child(n + 3) {
+    grid-column: 2;
+  }
+}

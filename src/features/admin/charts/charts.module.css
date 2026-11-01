@@ -1,0 +1,181 @@
+/* Chart marks follow the data-viz spec: 2px line, recessive grid/axes, text in ink tokens. */
+.figure {
+  margin: 0;
+  min-width: 0;
+}
+.plot {
+  position: relative;
+}
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: pan-y;
+}
+.svg:focus-visible {
+  outline: 3px solid var(--brand-orange);
+  outline-offset: 4px;
+}
+.grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+.axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.tick {
+  fill: var(--ink-400);
+  font-size: 11px;
+  font-family: var(--font-body);
+}
+.line {
+  fill: none;
+  stroke: #d97400;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.area {
+  fill: rgb(248 141 0 / 0.12);
+}
+.crosshair {
+  stroke: var(--ink-300);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.marker {
+  fill: #d97400;
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+.tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  background: var(--ink-900);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  pointer-events: none;
+  display: grid;
+  box-shadow: var(--shadow-md);
+}
+.tooltip span {
+  color: #b8c1d1;
+  font-size: 0.75rem;
+}
+.tableToggle {
+  margin-top: 10px;
+  font-size: 0.8125rem;
+}
+.tableToggle summary {
+  cursor: pointer;
+  color: var(--ink-500);
+  width: max-content;
+}
+.dataTable {
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.dataTable th,
+.dataTable td {
+  padding: 4px 16px 4px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Bars */
+.barList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.barRow {
+  display: grid;
+  gap: 6px;
+  padding: 8px 10px;
+  margin: 0 -10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+a.barRow:hover {
+  background: var(--surface-muted);
+}
+.barLabel {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.875rem;
+}
+.barName {
+  color: var(--ink-800);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.barValue {
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink-900);
+}
+.barValue small {
+  font-weight: 400;
+  color: var(--ink-400);
+}
+.barTrack {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--brand-orange);
+}
+
+/* Ring */
+.ring {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+.ring svg {
+  width: 168px;
+  height: 168px;
+}
+.ring figcaption {
+  font-size: 0.8125rem;
+  color: var(--ink-500);
+  text-align: center;
+}
+.ringTrack {
+  fill: none;
+  stroke: var(--surface-sunken);
+  stroke-width: 12;
+}
+.ringValue {
+  fill: none;
+  stroke: var(--brand-orange);
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+.ringNumber {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  fill: var(--ink-900);
+}
+.ringCaption {
+  font-size: 11px;
+  fill: var(--ink-400);
+}
