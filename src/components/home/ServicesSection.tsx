@@ -3,40 +3,42 @@ import { CtaButton } from "./CtaButton";
 
 export const SERVICE_PANELS = [
   {
-    label: "Social Media Strategy",
-    text: "A clear plan for what to post, why and when.",
+    label: "Social Media Marketing",
+    text: "What to post, when to post and why.",
     image: "/assets/images/service-1.webp",
     alt: "Team planning a social media strategy with charts and notes on a desk",
   },
   {
     label: "Content Creation",
-    text: "Captions, stories and carousels that build trust.",
+    text: "Words that connect, stories that build trust.",
     image: "/assets/images/service-2.webp",
     alt: "Laptop showing content analytics while someone types",
   },
   {
-    label: "Creative Design",
-    text: "Visuals that make your brand memorable.",
+    label: "Creative Marketing Design",
+    text: "Turn bold ideas into memorable visuals.",
     image: "/assets/images/service-3.webp",
     alt: "Designer’s desk with printed layouts and colour swatches",
   },
   {
-    label: "Short-form Video",
-    text: "Reels and Shorts that capture attention in seconds.",
+    label: "Short-form Video & Reels",
+    text: "From first glance to can't-stop-watching.",
     image: "/assets/images/service-4.webp",
     alt: "Phone recording a short-form video",
   },
+ 
   {
-    label: "Social Media Management",
-    text: "We plan, publish and report. You run your business.",
-    image: "/assets/images/service-5.webp",
-    alt: "Person managing social media on a phone",
-  },
-  {
-    label: "Brand Identity for Social",
-    text: "A consistent look across every platform.",
+    label: " Brand Identity & Branding",
+    text: "Give your brand a look people recognise.",
     image: "/assets/images/service-7.webp",
     alt: "Brand identity guidelines laid out on screen",
+  },
+
+   {
+    label: "Website Development",
+    text: "Build beautifully, perform seamlessly, convert effortlessly.",
+    image: "/assets/images/service-5.webp",
+    alt: "Website Development",
   },
 ] as const;
 

@@ -609,19 +609,37 @@
 
 .strategy-section-main__cards { list-style: none; }
 .strategy-section-main__card {
-  position: absolute;
-  left: calc(1066.67 * var(--d));
-  width: calc(537.33 * var(--d));
-  height: calc(154.67 * var(--d));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(16 * var(--d));
-  padding: 0 calc(26.67 * var(--d)) 0 calc(29.33 * var(--d));
-  border: calc(2 * var(--d)) dashed #8d5403;
-  border-radius: calc(17.18 * var(--d));
-  background: linear-gradient(-21.07deg, #1d1305 75.7%, #352918 97.33%);
+    position: absolute;
+    left: calc(1066.67 * var(--d));
+    width: calc(537.33 * var(--d));
+    height: calc(154.67 * var(--d));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(16 * var(--d));
+    padding: 0 calc(26.67 * var(--d)) 0 calc(29.33 * var(--d));
+
+    border: none;
+    border-radius: calc(17.18 * var(--d));
+
+    background: linear-gradient(
+        -21.07deg,
+        #1d1305 75.7%,
+        #352918 97.33%
+    );
 }
+
+.strategy-section-main__card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: calc(17.18 * var(--d));
+    pointer-events: none;
+
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 537 155' preserveAspectRatio='none'%3E%3Crect x='1' y='1' width='535' height='153' rx='17' fill='none' stroke='%238D5403' stroke-width='2' stroke-dasharray='13 11'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+
 .strategy-section-main__card--one   { top: 0; }
 .strategy-section-main__card--two   { top: calc(314.67 * var(--d)); }
 .strategy-section-main__card--three { top: calc(665.33 * var(--d)); }
