@@ -22,7 +22,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     "A creative, strategic and results-driven digital growth agency helping small businesses look big online.",
   contact_office: "Dallas, TX, USA",
   contact_phone: "+1 (959) 200-0495",
-  contact_email: "jovensbuzz@gmail.com",
+  contact_email: "hello@jovensbuzz.com",
   social_instagram: "https://instagram.com/jovensbuzz",
   social_facebook: "https://facebook.com/jovensbuzz",
   social_linkedin: "https://linkedin.com/company/jovensbuzz",
