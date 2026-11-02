@@ -41,8 +41,8 @@ export function HeroSection({ eyebrow, description }: { eyebrow: string; descrip
                 </mask>
                 <linearGradient id="heroGlowBeam" x1="0" y1="300" x2="0" y2="900" gradientUnits="userSpaceOnUse">
                   <stop offset="0" stopColor="#ff8a00" stopOpacity="0" />
-                  <stop offset=".45" stopColor="#ff8a00" stopOpacity=".22" />
-                  <stop offset="1" stopColor="#ffa21a" stopOpacity=".62" />
+                  <stop offset=".45" stopColor="#ff8a00" stopOpacity=".17" />
+                  <stop offset="1" stopColor="#ffa21a" stopOpacity=".46" />
                 </linearGradient>
                 <radialGradient
                   id="heroGlowAmbient"
@@ -52,7 +52,7 @@ export function HeroSection({ eyebrow, description }: { eyebrow: string; descrip
                   gradientUnits="userSpaceOnUse"
                   gradientTransform="matrix(1 0 0 .45 0 495)"
                 >
-                  <stop offset="0" stopColor="#ff7a00" stopOpacity=".22" />
+                  <stop offset="0" stopColor="#ff7a00" stopOpacity=".17" />
                   <stop offset="1" stopColor="#ff7a00" stopOpacity="0" />
                 </radialGradient>
                 <linearGradient id="heroFloor" x1="0" y1="914" x2="0" y2="1254" gradientUnits="userSpaceOnUse">
