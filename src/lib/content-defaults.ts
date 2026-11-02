@@ -3,6 +3,14 @@ import type { FaqItem, ServiceItem, SiteContent } from "@/types/api";
 // Fallback copy, used only when the API is unreachable (e.g. during a build without the
 // backend). Mirrors the seeded database content so the page never renders empty.
 
+// Official contact email and social profiles. These always win over API/database values.
+export const CONTACT_EMAIL = "hello@jovensbuzz.com";
+export const SOCIAL_URLS = {
+  social_linkedin: "https://www.linkedin.com/company/144002640/",
+  social_facebook: "https://www.facebook.com/profile.php?id=61595132745256",
+  social_instagram: "https://www.instagram.com/jovens_buzz?rpxt=aWFqaTE1bWs4Mmpi",
+} as const;
+
 export const DEFAULT_CONTENT: SiteContent = {
   hero_eyebrow: "Creative. Strategic. Results-Driven.",
   hero_headline: "Making Small Businesses Look Big",
@@ -22,10 +30,8 @@ export const DEFAULT_CONTENT: SiteContent = {
     "A creative, strategic and results-driven digital growth agency helping small businesses look big online.",
   contact_office: "Dallas, TX, USA",
   contact_phone: "+1 (959) 200-0495",
-  contact_email: "hello@jovensbuzz.com",
-  social_instagram: "https://instagram.com/jovensbuzz",
-  social_facebook: "https://facebook.com/jovensbuzz",
-  social_linkedin: "https://linkedin.com/company/jovensbuzz",
+  contact_email: CONTACT_EMAIL,
+  ...SOCIAL_URLS,
   social_youtube: "https://youtube.com/@jovensbuzz",
   social_x: "",
   social_dribbble: "",

@@ -37,7 +37,7 @@ export const SERVICE_PANELS = [
    {
     label: "Website Development",
     text: "Build beautifully, perform seamlessly, convert effortlessly.",
-    image: "/assets/images/service-5.webp",
+    image: "/assets/images/website-develop.webp",
     alt: "Website Development",
   },
 ] as const;

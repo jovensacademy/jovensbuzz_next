@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- original markup preserved for pixel parity */
+import { CONTACT_EMAIL } from "@/lib/content-defaults";
 import { ContactForm } from "./ContactForm";
 
 interface ContactSectionProps {
@@ -47,8 +48,8 @@ export function ContactSection({ office, phone, email }: ContactSectionProps) {
               {email && (
                 <div className="site-footer-main__contact">
                   <span className="site-footer-main__contact-label">Email</span>
-                  <a className="site-footer-main__contact-value" href={`mailto:${email}`}>
-                    {email}
+                  <a className="site-footer-main__contact-value" href={`mailto:${CONTACT_EMAIL}`}>
+                    {CONTACT_EMAIL}
                   </a>
                 </div>
               )}
@@ -60,7 +61,7 @@ export function ContactSection({ office, phone, email }: ContactSectionProps) {
               <div className="contact-form-section-main__card-header">
                 <h3 className="contact-form-section-main__card-title">Let’s Talk !</h3>
               </div>
-              <ContactForm contactEmail={email} />
+              <ContactForm contactEmail={CONTACT_EMAIL} />
             </div>
           </div>
         </div>

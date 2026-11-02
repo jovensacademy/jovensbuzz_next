@@ -1,6 +1,6 @@
 import "server-only";
 import { contentRevalidateSeconds, internalApiBaseUrl } from "@/lib/config";
-import { DEFAULT_CONTENT, DEFAULT_FAQS, DEFAULT_SERVICES } from "@/lib/content-defaults";
+import { CONTACT_EMAIL, DEFAULT_CONTENT, DEFAULT_FAQS, DEFAULT_SERVICES, SOCIAL_URLS } from "@/lib/content-defaults";
 import type { ApiEnvelope, FaqItem, ServiceItem, SiteContent } from "@/types/api";
 
 /** Cache tags revalidated by the admin proxy after content edits. */
@@ -43,5 +43,6 @@ export async function getSiteContent(): Promise<SiteContent> {
     // Social/contact keys may be intentionally blanked by an admin; copy keys fall back.
     if (value || key.startsWith("social_") || key.startsWith("contact_")) merged[key] = value;
   }
-  return merged;
+  // Official email and social profiles are fixed, whatever the database holds.
+  return { ...merged, contact_email: CONTACT_EMAIL, ...SOCIAL_URLS };
 }
