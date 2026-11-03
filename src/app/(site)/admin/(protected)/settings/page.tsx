@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CircleCheck, CircleX } from "lucide-react";
-import { PasswordForm, ProfileForm, RetryFailedSyncs } from "@/features/settings/SettingsForms";
+import { ProfileForm, RetryFailedSyncs } from "@/features/settings/SettingsForms";
 import { adminGet, getCurrentAdmin } from "@/lib/api/server";
-import { formatDateTime, titleCase } from "@/lib/format";
+import { can } from "@/lib/admin-access";
+import type { TimeZoneOption } from "@/types/api";
+import { titleCase } from "@/lib/format";
+import { AdminDateTime } from "@/features/admin/AdminTime";
 import type { AuditLogEntry, EmailIntegrationStatus, IntegrationStatus, Paged } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
 
@@ -13,14 +16,17 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
   const { auditPage } = await searchParams;
   const page = Math.max(1, Number.parseInt(auditPage ?? "1", 10) || 1);
 
-  const [admin, sheets, email, audit] = await Promise.all([
-    getCurrentAdmin(),
-    adminGet<IntegrationStatus>("/admin/settings/integrations/google-sheets"),
-    adminGet<EmailIntegrationStatus>("/admin/settings/integrations/email"),
-    adminGet<Paged<AuditLogEntry>>(`/admin/audit-logs?page=${page - 1}&size=15`),
+  const admin = await getCurrentAdmin();
+  // Each section is loaded only when this account may see it (the API enforces the same rules)
+  const showIntegrations = can(admin, "SETTINGS_VIEW");
+  const [sheets, email, audit, timezones] = await Promise.all([
+    showIntegrations ? adminGet<IntegrationStatus>("/admin/settings/integrations/google-sheets") : null,
+    showIntegrations ? adminGet<EmailIntegrationStatus>("/admin/settings/integrations/email") : null,
+    can(admin, "AUDIT_VIEW") ? adminGet<Paged<AuditLogEntry>>(`/admin/audit-logs?page=${page - 1}&size=15`) : null,
+    adminGet<TimeZoneOption[]>("/auth/timezones").catch(() => [] as TimeZoneOption[]),
   ]);
 
-  const checks = [
+  const checks = !sheets ? [] : [
     { ok: sheets.spreadsheetIdSet, label: "Spreadsheet ID configured", detail: sheets.spreadsheetIdHint ? `ends ${sheets.spreadsheetIdHint}` : "GOOGLE_SHEETS_SPREADSHEET_ID" },
     { ok: sheets.credentialsFileReadable, label: "Service account key readable", detail: "GOOGLE_SERVICE_ACCOUNT_FILE" },
   ];
@@ -40,28 +46,43 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
             <div>
               <h2 id="profile-title">Admin profile</h2>
               <p>
-                Signed in as <strong>{admin.username}</strong> · last sign-in {formatDateTime(admin.lastLoginAt)}
+                Signed in as <strong>{admin.username}</strong> · last sign-in <AdminDateTime iso={admin.lastLoginAt} />
               </p>
             </div>
           </div>
-          <ProfileForm displayName={admin.displayName} email={admin.email} />
+          <ProfileForm displayName={admin.displayName} email={admin.email} timezone={admin.timezone} timezones={timezones} />
         </section>
 
         <section id="password" className={styles.card} aria-labelledby="password-title">
           <div className={styles.cardHeader}>
             <div>
-              <h2 id="password-title">Change password</h2>
+              <h2 id="password-title">Password</h2>
               <p>
-                {admin.passwordChangedAt
-                  ? `Last changed ${formatDateTime(admin.passwordChangedAt)}`
-                  : "Still using the bootstrap password — change it before going live."}
+                {admin.passwordChangedAt ? (
+                  <>
+                    Last set <AdminDateTime iso={admin.passwordChangedAt} />
+                  </>
+                ) : (
+                  "Set when your account was created."
+                )}
               </p>
             </div>
           </div>
-          <PasswordForm username={admin.username} />
+          <p className={styles.muted}>
+            {admin.adminRole === "OWNER" ? (
+              <>
+                Owners set every password, including their own, in <Link href="/admin/users">Users</Link> → select an account → Set new
+                password. Existing passwords are never shown: they are stored only as one-way hashes.
+              </>
+            ) : (
+              "Passwords are managed by an owner. Ask an owner if you need a new password."
+            )}
+          </p>
         </section>
       </div>
 
+      {sheets && email && (
+        <>
       <section id="integrations" className={styles.card} aria-labelledby="sheets-title">
         <div className={styles.cardHeader}>
           <div>
@@ -157,6 +178,10 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
         )}
       </section>
 
+        </>
+      )}
+
+      {audit && (
       <section className={styles.card} aria-labelledby="audit-title">
         <div className={styles.cardHeader}>
           <div>
@@ -184,7 +209,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
               <tbody>
                 {audit.content.map((entry) => (
                   <tr key={entry.id}>
-                    <td className={styles.nowrap}>{formatDateTime(entry.createdAt)}</td>
+                    <td className={styles.nowrap}><AdminDateTime iso={entry.createdAt} /></td>
                     <td>{entry.adminUsername}</td>
                     <td className={styles.nowrap}>{titleCase(entry.action)}</td>
                     <td className={styles.nowrap}>
@@ -221,6 +246,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           </nav>
         )}
       </section>
+      )}
     </>
   );
 }

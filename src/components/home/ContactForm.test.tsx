@@ -133,9 +133,11 @@ describe("homepage ContactForm", () => {
   it("defaults the phone country to the United States (+1)", async () => {
     mockApi();
     renderForm();
-    const trigger = screen.getByRole("combobox", { name: /country/i });
-    expect(trigger).toHaveTextContent("US");
+    const trigger = screen.getByRole("combobox", { name: /country: united states \(\+1\)/i });
+    // Flag + dial code; the short ISO code is no longer shown in place of the flag
+    expect(trigger.querySelector("svg.jb-phone__flag")).not.toBeNull();
     expect(trigger).toHaveTextContent("+1");
+    expect(trigger).not.toHaveTextContent("US");
     expect(screen.getByLabelText("Phone")).toHaveAttribute("placeholder", "(201) 555-0123");
   });
 
@@ -146,15 +148,19 @@ describe("homepage ContactForm", () => {
 
     await user.click(screen.getByRole("combobox", { name: /country/i }));
     const options = screen.getAllByRole("option").filter((o) => o.closest("[role=listbox]"));
+    // Each option: flag, full country name, dial code, and a check on the selected one
     expect(options.map((o) => o.textContent)).toEqual([
-      "USUnited States+1",
-      "INIndia+91",
-      "CACanada+1",
-      "GBUnited Kingdom+44",
-      "AUAustralia+61",
+      "United States+1",
+      "India+91",
+      "Canada+1",
+      "United Kingdom+44",
+      "Australia+61",
     ]);
+    options.forEach((o) => expect(o.querySelector("svg.jb-phone__flag")).not.toBeNull());
     expect(options[0]).toHaveAttribute("aria-selected", "true");
     expect(options[0]).toHaveClass("is-selected");
+    expect(options[0].querySelector(".jb-dropdown__check svg")).not.toBeNull();
+    expect(options[1].querySelector(".jb-dropdown__check svg")).toBeNull();
 
     await user.click(options[1]); // India
     expect(screen.getByRole("combobox", { name: /country/i })).toHaveTextContent("+91");
@@ -250,6 +256,47 @@ describe("homepage ContactForm", () => {
     await user.click(within(dialog).getByRole("button", { name: "Close" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(document.body.style.overflow).toBe("");
+  });
+
+  it.each([
+    ["Canada", "(506) 234-5678", "+15062345678", "CA"],
+    ["United Kingdom", "07400 123456", "+447400123456", "GB"],
+    ["Australia", "0412 345 678", "+61412345678", "AU"],
+    ["India", "98765 43210", "+919876543210", "IN"],
+  ])("selecting %s submits its own ISO code and international number", async (country, local, e164, iso) => {
+    const user = userEvent.setup();
+    const fetchSpy = mockApi({
+      enquiry: () => json(201, { success: true, data: { publicReference: "JB-2026-ABC234", submittedAt: "", duplicate: false } }),
+    });
+    renderForm();
+    await waitFor(() => expect(serviceSelect()).toBeEnabled());
+    await user.click(screen.getByRole("combobox", { name: /country/i }));
+    await user.click(screen.getByRole("option", { name: new RegExp(country) }));
+    expect(screen.getByRole("combobox", { name: new RegExp(`country: ${country}`, "i") })).toBeInTheDocument();
+    await user.type(screen.getByLabelText("First name"), "Ada");
+    await user.type(screen.getByLabelText("Last name"), "Lovelace");
+    await user.type(screen.getByLabelText("Email"), "ada@example.com");
+    await user.type(screen.getByLabelText("Phone"), local);
+    await chooseService(user, "Short-Form Video Production");
+    await submit(user);
+    await screen.findByRole("dialog", { name: "Your Buzz Starts Here." });
+
+    const call = fetchSpy.mock.calls.find(([url]) => String(url).endsWith("/enquiries"))!;
+    const body = JSON.parse(String((call[1] as RequestInit).body));
+    // +1 is shared by the US and Canada: the chosen flag, not the dial code, decides the country
+    expect(body).toMatchObject({ phone: e164, phoneCountry: iso });
+  });
+
+  it("keeps the typed number when switching country and re-validates it for the new country", async () => {
+    const user = userEvent.setup();
+    mockApi();
+    renderForm();
+    await user.type(screen.getByLabelText("Phone"), "2015550123");
+    await user.click(screen.getByRole("combobox", { name: /country/i }));
+    await user.click(screen.getByRole("option", { name: /Canada/ }));
+    // The digits are kept (formatted on blur); a US (201) number is not valid for Canada even though both use +1
+    expect((screen.getByLabelText("Phone") as HTMLInputElement).value.replace(/\D/g, "")).toBe("2015550123");
+    expect(await screen.findByText(/valid Canada phone number/i)).toBeInTheDocument();
   });
 
   it("closes the modal with Escape", async () => {

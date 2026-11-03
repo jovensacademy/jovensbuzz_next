@@ -631,6 +631,7 @@ a.cellPrimary:hover {
 }
 .pageButtons {
   display: flex;
+  flex-wrap: wrap; /* rows-per-page + Previous/Next never push the page wider than a phone */
   gap: 6px;
   align-items: center;
 }
@@ -832,6 +833,118 @@ a.cellPrimary:hover {
 /* Contain absolutely positioned (e.g. visually-hidden) descendants inside the scroll area */
 .tableWrap {
   position: relative;
+  /* A table that ends its card follows the card's rounded bottom corners while it scrolls */
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Table followed by a footer (pagination) in the same card: no bleed to the card bottom, so the
+   horizontal scrollbar sits directly under the rows and the footer lines up with the table edges */
+.tableWrapWithFooter {
+  margin-bottom: 0;
+  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Full-width card footer under a table: same horizontal padding as the table cells */
+.tableFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 -22px -22px;
+  padding: 14px 22px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  font-size: 0.875rem;
+  color: var(--ink-500);
+}
+
+.rowActions {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* View/Delete stay pinned to the right edge while a wide table scrolls horizontally */
+.actionsCell {
+  /* position: sticky; */
+  right: 0;
+  z-index: 1;
+  background: var(--surface);
+  box-shadow: inset 1px 0 0 var(--border);
+}
+
+.table th.actionsCell {
+  background: var(--surface-muted);
+}
+
+.table tbody tr:hover .actionsCell {
+  background: #fafbfc;
+}
+
+/* Warning line inside the permanent-delete confirmation */
+.purgeWarning {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--critical-bg);
+  color: var(--critical);
+  font-weight: 600;
+}
+
+.purgeWarning svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+/* Row-level delete: icon-only, same height as the btn-sm View link, red only in the icon until hover */
+.deleteIcon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--critical);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.deleteIcon:hover {
+  border-color: #f3c7c3;
+  background: var(--critical-bg);
+}
+
+.deleteIcon:focus-visible {
+  outline: 2px solid var(--critical);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .deleteIcon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tableFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tableFooter > span {
+    text-align: center;
+  }
+  .tableFooter .pageButtons {
+    justify-content: center;
+  }
 }
 .search {
   min-width: 0;

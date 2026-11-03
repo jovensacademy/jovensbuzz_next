@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { AlertTriangle, Eye, EyeOff, LogIn } from "lucide-react";
+import { AlertTriangle, LogIn } from "lucide-react";
+import { PasswordInput } from "@/features/admin/PasswordInput";
 import { CSRF_HEADER } from "@/lib/auth/session";
 
 const loginSchema = z.object({
@@ -15,7 +16,6 @@ type LoginValues = z.infer<typeof loginSchema>;
 
 export function LoginForm({ next, expired }: { next: string; expired?: boolean }) {
   const [error, setError] = useState<string | null>(expired ? "Your session has ended. Please sign in again." : null);
-  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -79,28 +79,13 @@ export function LoginForm({ next, expired }: { next: string; expired?: boolean }
         <label className="field-label" htmlFor="login-password">
           Password
         </label>
-        <div style={{ position: "relative" }}>
-          <input
-            id="login-password"
-            className="input"
-            type={showPassword ? "text" : "password"}
-            autoComplete="current-password"
-            style={{ paddingRight: 48 }}
-            aria-invalid={errors.password ? true : undefined}
-            aria-describedby={errors.password ? "login-password-error" : undefined}
-            {...register("password")}
-          />
-          <button
-            type="button"
-            className="btn btn-ghost btn-sm"
-            style={{ position: "absolute", right: 4, top: 5 }}
-            onClick={() => setShowPassword((value) => !value)}
-            aria-label={showPassword ? "Hide password" : "Show password"}
-            aria-pressed={showPassword}
-          >
-            {showPassword ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}
-          </button>
-        </div>
+        <PasswordInput
+          id="login-password"
+          autoComplete="current-password"
+          aria-invalid={errors.password ? true : undefined}
+          aria-describedby={errors.password ? "login-password-error" : undefined}
+          {...register("password")}
+        />
         {errors.password && (
           <p id="login-password-error" className="field-error">
             {errors.password.message}

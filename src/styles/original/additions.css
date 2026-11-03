@@ -16,9 +16,8 @@
   white-space: nowrap;
   overflow: hidden;
 }
-.jb-phone__flag { flex: none; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08); }
-.jb-phone__trigger-iso { font-weight: 600; font-size: .85em; color: #6b7280; }
-.jb-phone__trigger-dial { font-weight: 600; color: #111827; }
+.jb-phone__flag { flex: none; display: block; border-radius: 3px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .1); }
+.jb-phone__trigger-dial { font-weight: 600; color: #111827; font-variant-numeric: tabular-nums; }
 
 /* Service trigger keeps the original select look (border, radius, chevron) */
 .jb-dropdown__trigger {
@@ -65,30 +64,19 @@
   color: #1f2937;
   cursor: pointer;
   user-select: none;
+  transition: background-color .15s ease, color .15s ease;
 }
 .jb-dropdown__option + .jb-dropdown__option { margin-top: 2px; }
-.jb-phone__option { grid-template-columns: auto 1fr auto 18px; }
+/* Flag | country name | dial code (right-aligned) | check */
+.jb-phone__option { grid-template-columns: 22px 1fr auto 18px; color: #0b1730; }
 .jb-dropdown__option--service { grid-template-columns: 1fr 18px; color: #0b1730; }
 .jb-dropdown__option.is-active { background: #fff6ee; }
 .jb-dropdown__option.is-selected { background: #fde3cd; font-weight: 600; }
-.jb-phone__option.is-selected { color: #9a3d06; }
+.jb-phone__option.is-selected { color: #0b1730; }
 .jb-dropdown__option--service.is-selected { color: #0b1730; }
 .jb-dropdown__label { overflow-wrap: anywhere; }
-.jb-phone__chip {
-  display: inline-grid;
-  place-items: center;
-  min-width: 34px;
-  padding: 3px 6px;
-  border-radius: 5px;
-  background: #fde7d6;
-  color: #9a3d06;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .06em;
-}
-.jb-phone__option.is-selected .jb-phone__chip { background: #fbd5b5; }
-.jb-phone__dial { color: #6b7280; font-variant-numeric: tabular-nums; }
-.jb-phone__option.is-selected .jb-phone__dial { color: #9a3d06; }
+.jb-phone__name { overflow-wrap: anywhere; }
+.jb-phone__dial { justify-self: end; color: #6b7280; font-weight: 500; font-variant-numeric: tabular-nums; }
 .jb-dropdown__check { color: #f4761f; display: inline-flex; }
 
 @keyframes jbDropdownIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } }
@@ -96,7 +84,6 @@
 
 /* Phones: subtly more compact lists that always stay inside the viewport */
 @media (max-width: 575.98px) {
-  .jb-phone__trigger-iso { display: none; }
   /* Narrower phone-country list — stays well inside the viewport on 375 px screens */
   .jb-phone__list { width: min(270px, calc(100vw - 56px)); }
   /* Full-width service list must never overflow the viewport horizontally */
@@ -104,8 +91,7 @@
   .jb-dropdown__list { padding: 6px; border-radius: 14px; top: calc(100% + 5px); }
   /* Slightly reduced max-height so the list fits on shorter phones without scrolling past the fold */
   .jb-dropdown__list--full { max-height: 236px; }
-  .jb-dropdown__option { gap: 8px; padding: 8px 10px; border-radius: 9px; font-size: 14.5px; }
-  .jb-phone__chip { min-width: 28px; padding: 2px 4px; font-size: 10px; }
+  .jb-dropdown__option { gap: 8px; padding: 10px; border-radius: 9px; font-size: 14.5px; } /* >= 40px touch rows */
 }
 @media (prefers-reduced-motion: reduce) {
   .jb-dropdown__list,

@@ -15,8 +15,11 @@ import { BarList } from "@/features/admin/charts/BarList";
 import { ProgressRing } from "@/features/admin/charts/ProgressRing";
 import { TrendChart } from "@/features/admin/charts/TrendChart";
 import { EnquiryTable } from "@/features/enquiries/EnquiryTable";
-import { businessTimezone } from "@/features/admin/time";
-import { adminGet } from "@/lib/api/server";
+import { DeletedNotice, deletedReference } from "@/features/enquiries/DeletedNotice";
+import { redirect } from "next/navigation";
+import { adminTimezone } from "@/features/admin/time";
+import { can, homePathFor } from "@/lib/admin-access";
+import { adminGet, getCurrentAdmin } from "@/lib/api/server";
 import { formatNumber, titleCase } from "@/lib/format";
 import type { DashboardSummary, ServiceDistribution, StatusDistribution, TrendPoint } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
@@ -25,10 +28,19 @@ export const metadata: Metadata = { title: "Overview" };
 
 const RANGES = [7, 30, 90] as const;
 
-export default async function OverviewPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
-  const { range: rangeParam } = await searchParams;
+export default async function OverviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string; deleted?: string | string[] }>;
+}) {
+  const { range: rangeParam, deleted } = await searchParams;
   const days = RANGES.find((r) => String(r) === rangeParam) ?? 30;
-  const tz = encodeURIComponent(businessTimezone());
+  const admin = await getCurrentAdmin();
+  if (!can(admin, "ANALYTICS_VIEW")) redirect(homePathFor(admin)); // e.g. a manager without analytics
+  const canDelete = can(admin, "ENQUIRIES_DELETE");
+  const deletedRef = deletedReference(deleted);
+  const zone = await adminTimezone();
+  const tz = encodeURIComponent(zone);
 
   const [summary, trends, services, statuses] = await Promise.all([
     adminGet<DashboardSummary>(`/admin/dashboard/summary?tz=${tz}`),
@@ -44,7 +56,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
     { label: "Qualified leads", value: summary.qualifiedLeads, Icon: Star, href: "/admin/enquiries?status=QUALIFIED" },
     { label: "Converted", value: summary.convertedLeads, Icon: BadgeCheck, href: "/admin/enquiries?status=CONVERTED" },
     { label: "Closed", value: summary.closedEnquiries, Icon: CircleSlash, href: "/admin/enquiries?status=CLOSED" },
-    { label: "Received today", value: summary.enquiriesToday, Icon: CalendarDays, hint: businessTimezone() },
+    { label: "Received today", value: summary.enquiriesToday, Icon: CalendarDays, hint: zone },
     { label: "This month", value: summary.enquiriesThisMonth, Icon: CalendarRange, hint: "Since the 1st" },
   ];
   const trendTotal = trends.reduce((sum, point) => sum + point.count, 0);
@@ -192,6 +204,8 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </section>
       </div>
 
+      {deletedRef && <DeletedNotice reference={deletedRef} canViewDeleted={canDelete} />}
+
       <section className={styles.card} aria-labelledby="recent-title">
         <div className={styles.cardHeader}>
           <h2 id="recent-title">Recent enquiries</h2>
@@ -199,7 +213,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
             View all →
           </Link>
         </div>
-        <EnquiryTable enquiries={summary.recentEnquiries} compact caption="Most recent enquiries" />
+        <EnquiryTable enquiries={summary.recentEnquiries} compact caption="Most recent enquiries" canDelete={canDelete} />
       </section>
     </>
   );

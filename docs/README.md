@@ -120,9 +120,8 @@ The first administrator is created **only when the `admin_users` table is empty*
 - Username: `jovens_buzz_2026`
 - Password: `Jovensbuzz@2026`
 
-Sign in at http://localhost:3000/admin/login. The password is stored only as a BCrypt hash. The account is flagged
-**must change password**, and the dashboard shows a banner until you change it under **Settings → Change password**.
-Changed passwords persist across restarts; the bootstrap never overwrites an existing account. With
+Sign in at http://localhost:3000/admin/login. The password is stored only as a BCrypt hash. Owners set passwords
+for every account (including their own) under **Users → Set new password**; there is no forced change. Passwords persist across restarts; the bootstrap never overwrites an existing account. With
 `APP_PRODUCTION_MODE=true`, the API refuses to start with the default JWT secret or the documented dev password.
 
 Five failed sign-ins lock the account for 15 minutes, and sign-in is rate limited per IP.

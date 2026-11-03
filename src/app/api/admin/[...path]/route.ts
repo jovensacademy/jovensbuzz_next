@@ -17,7 +17,7 @@ import type { ApiEnvelope, LoginResult } from "@/types/api";
  * converted to a Bearer header server-side, and public content caches are revalidated
  * after successful content edits.
  */
-const ALLOWED_PREFIXES = ["admin/", "auth/me", "auth/change-password"];
+const ALLOWED_PREFIXES = ["admin/", "auth/me", "auth/timezones"];
 
 const REVALIDATE_ON: Array<[RegExp, string[]]> = [
   [/^admin\/services/, [CONTENT_TAGS.services]],
@@ -67,7 +67,8 @@ async function handle(request: NextRequest, ctx: { params: Promise<{ path: strin
     upstream = await fetch(target, {
       method,
       headers,
-      body: method === "GET" || method === "HEAD" ? undefined : await request.text(),
+      // Raw bytes, so multipart uploads (Excel import) pass through unchanged
+      body: method === "GET" || method === "HEAD" ? undefined : await request.arrayBuffer(),
       cache: "no-store",
       signal: AbortSignal.timeout(30000),
     });
@@ -78,17 +79,8 @@ async function handle(request: NextRequest, ctx: { params: Promise<{ path: strin
     );
   }
 
-  // Password changes revoke old tokens and return a replacement
-  let bodyText = await upstream.text();
-  if (upstream.ok && apiPath === "auth/change-password") {
-    const parsed = JSON.parse(bodyText) as ApiEnvelope<LoginResult>;
-    if (parsed.data?.token) {
-      renewedToken = parsed.data.token;
-      const { token: _omit, ...rest } = parsed.data;
-      void _omit;
-      bodyText = JSON.stringify({ ...parsed, data: rest });
-    }
-  }
+  // Raw bytes, so binary downloads (Excel export/template) are not corrupted by text decoding
+  const body = await upstream.arrayBuffer();
 
   if (upstream.ok && method !== "GET") {
     for (const [pattern, tags] of REVALIDATE_ON) {
@@ -96,7 +88,7 @@ async function handle(request: NextRequest, ctx: { params: Promise<{ path: strin
     }
   }
 
-  const response = new NextResponse(bodyText, {
+  const response = new NextResponse(body, {
     status: upstream.status,
     headers: {
       "Content-Type": upstream.headers.get("content-type") ?? "application/json",
@@ -104,6 +96,7 @@ async function handle(request: NextRequest, ctx: { params: Promise<{ path: strin
       ...(upstream.headers.get("content-disposition")
         ? { "Content-Disposition": upstream.headers.get("content-disposition")! }
         : {}),
+      ...(upstream.headers.get("x-export-count") ? { "X-Export-Count": upstream.headers.get("x-export-count")! } : {}),
     },
   });
 

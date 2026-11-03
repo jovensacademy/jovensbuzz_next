@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CheckCircle2, RefreshCw, TriangleAlert } from "lucide-react";
 import { adminRequest, errorMessage } from "@/lib/api/client";
 import { formatDateTime } from "@/lib/format";
+import { useAdminTimeZone } from "@/features/admin/AdminTime";
 import type { EmailNotification, EmailNotificationOverview } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
 
@@ -23,6 +24,7 @@ function StatusBadge({ status }: { status: EmailNotification["status"] }) {
 /** Email delivery state for one enquiry, with an admin retry (sent emails are never re-sent). */
 export function EmailNotificationsCard({ enquiryId, overview }: { enquiryId: number; overview: EmailNotificationOverview }) {
   const router = useRouter();
+  const timeZone = useAdminTimeZone();
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState<{ kind: "success" | "error"; text: string } | null>(null);
   const unsent = overview.notifications.filter((n) => n.status !== "SENT").length;
@@ -67,8 +69,8 @@ export function EmailNotificationsCard({ enquiryId, overview }: { enquiryId: num
               <small>
                 To {n.recipientEmail ?? (overview.adminRecipientConfigured ? "configured admin address" : "admin address not configured")}
                 {" · "}
-                {n.status === "SENT" ? `sent ${formatDateTime(n.sentAt)}` : `${n.attemptCount} attempt${n.attemptCount === 1 ? "" : "s"}, last ${formatDateTime(n.updatedAt)}`}
-                {n.nextRetryAt && n.status === "PENDING" ? ` · next retry ${formatDateTime(n.nextRetryAt)}` : ""}
+                {n.status === "SENT" ? `sent ${formatDateTime(n.sentAt, timeZone)}` : `${n.attemptCount} attempt${n.attemptCount === 1 ? "" : "s"}, last ${formatDateTime(n.updatedAt, timeZone)}`}
+                {n.nextRetryAt && n.status === "PENDING" ? ` · next retry ${formatDateTime(n.nextRetryAt, timeZone)}` : ""}
               </small>
               {n.lastError && n.status !== "SENT" && <small className={styles.muted}>{n.lastError}</small>}
             </li>

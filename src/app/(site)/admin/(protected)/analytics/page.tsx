@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Inbox } from "lucide-react";
 import { BarList } from "@/features/admin/charts/BarList";
 import { TrendChart } from "@/features/admin/charts/TrendChart";
-import { businessTimezone, isIsoDate, isoDaysAgo, todayIso } from "@/features/admin/time";
-import { adminGet } from "@/lib/api/server";
+import { NoAccess } from "@/features/admin/NoAccess";
+import { adminTimezone, isIsoDate, isoDaysAgo, todayIso } from "@/features/admin/time";
+import { can } from "@/lib/admin-access";
+import { adminGet, getCurrentAdmin } from "@/lib/api/server";
 import { formatNumber, titleCase } from "@/lib/format";
 import type { ServiceDistribution, StatusDistribution, TrendPoint } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
@@ -19,15 +21,17 @@ const PRESETS = [
 ];
 
 export default async function AnalyticsPage({ searchParams }: { searchParams: Promise<{ from?: string; to?: string }> }) {
+  if (!can(await getCurrentAdmin(), "ANALYTICS_VIEW")) return <NoAccess what="analytics" />;
   const params = await searchParams;
-  const to = isIsoDate(params.to) ? params.to : todayIso();
-  let from = isIsoDate(params.from) ? params.from : isoDaysAgo(29);
+  const tz = await adminTimezone();
+  const to = isIsoDate(params.to) ? params.to : todayIso(tz);
+  let from = isIsoDate(params.from) ? params.from : isoDaysAgo(29, tz);
   if (from > to) from = to;
   // The API caps ranges at 366 days
   const spanDays = Math.round((Date.parse(to) - Date.parse(from)) / 86_400_000) + 1;
   if (spanDays > 366) from = new Date(Date.parse(to) - 365 * 86_400_000).toISOString().slice(0, 10);
 
-  const range = `from=${from}&to=${to}&tz=${encodeURIComponent(businessTimezone())}`;
+  const range = `from=${from}&to=${to}&tz=${encodeURIComponent(tz)}`;
   const [trends, services, statuses] = await Promise.all([
     adminGet<TrendPoint[]>(`/admin/dashboard/enquiry-trends?${range}`),
     adminGet<ServiceDistribution[]>(`/admin/dashboard/service-distribution?${range}`),
@@ -45,7 +49,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
         <div>
           <h1>Analytics</h1>
           <p>
-            Enquiries received between {from} and {to} ({businessTimezone()}).
+            Enquiries received between {from} and {to} ({tz}).
           </p>
         </div>
       </div>
@@ -62,14 +66,14 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
             <label className="field-label" htmlFor="range-to">
               To
             </label>
-            <input id="range-to" name="to" type="date" className="input" defaultValue={to} max={todayIso()} />
+            <input id="range-to" name="to" type="date" className="input" defaultValue={to} max={todayIso(tz)} />
           </div>
           <button type="submit" className="btn btn-dark btn-sm">
             Apply range
           </button>
           <span className={styles.pageButtons} style={{ flexWrap: "wrap" }}>
             {PRESETS.map((preset) => (
-              <Link key={preset.days} href={`/admin/analytics?from=${isoDaysAgo(preset.days - 1)}&to=${todayIso()}`} className="btn btn-ghost btn-sm">
+              <Link key={preset.days} href={`/admin/analytics?from=${isoDaysAgo(preset.days - 1, tz)}&to=${todayIso(tz)}`} className="btn btn-ghost btn-sm">
                 {preset.label}
               </Link>
             ))}

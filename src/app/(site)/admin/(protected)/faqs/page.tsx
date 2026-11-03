@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { FaqManager } from "@/features/content/FaqManager";
-import { adminGet } from "@/lib/api/server";
+import { adminGet, getCurrentAdmin } from "@/lib/api/server";
+import { can } from "@/lib/admin-access";
+import { NoAccess } from "@/features/admin/NoAccess";
 import type { FaqItem } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
 
 export const metadata: Metadata = { title: "FAQs" };
 
 export default async function FaqsAdminPage() {
+  if (!can(await getCurrentAdmin(), "CONTENT_MANAGE")) return <NoAccess what="FAQs" />;
   const faqs = await adminGet<FaqItem[]>("/admin/faqs");
   return (
     <>

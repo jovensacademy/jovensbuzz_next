@@ -1,0 +1,177 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.selectedRow {
+  background: var(--brand-orange-soft);
+}
+
+.rowButton {
+  all: unset;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink-900, #0b1730);
+}
+
+.rowButton:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.permissionGrid {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.92rem;
+}
+
+.check input {
+  margin-top: 3px;
+  accent-color: var(--brand-orange);
+}
+
+.fullAccess {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-orange-soft);
+  color: var(--accent-text);
+  font-size: 0.92rem;
+}
+
+.section {
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.section h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.inlineRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.inlineRow .field {
+  flex: 1 1 200px;
+}
+
+.danger {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  margin-top: 20px;
+  border: 1px solid #f3c7c3;
+  border-radius: var(--radius-sm);
+  background: var(--critical-bg);
+}
+
+.danger h3 {
+  margin: 0;
+  color: var(--critical);
+  font-size: 0.95rem;
+}
+
+.danger p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.dialog {
+  width: min(460px, calc(100vw - 32px));
+  padding: 24px;
+  border: 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.dialog::backdrop {
+  background: rgb(11 23 48 / 0.45);
+}
+
+.dialog h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* One-time display of a password the owner just set */
+.credentials {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+  border: 1px solid var(--brand-orange-tint);
+  border-radius: var(--radius-sm);
+  background: var(--brand-orange-soft);
+}
+
+.credentials h3 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.credentials p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--accent-text);
+}
+
+.secretRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.secret {
+  flex: 1 1 200px;
+  padding: 8px 10px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+  user-select: all;
+}

@@ -4,9 +4,13 @@ import { notFound } from "next/navigation";
 import { Mail, Phone } from "lucide-react";
 import { StatusBadge, SyncBadge } from "@/features/admin/Badges";
 import { AssignmentForm, NoteForm, RetrySyncButton, StatusForm } from "@/features/enquiries/EnquiryActions";
-import { adminGet, adminGetOrNull } from "@/lib/api/server";
-import { formatDateTime, titleCase } from "@/lib/format";
+import { adminGet, adminGetOrNull, getCurrentAdmin } from "@/lib/api/server";
+import { can } from "@/lib/admin-access";
+import { NoAccess } from "@/features/admin/NoAccess";
+import { titleCase } from "@/lib/format";
+import { AdminDateTime } from "@/features/admin/AdminTime";
 import { EmailNotificationsCard } from "@/features/enquiries/EmailNotificationsCard";
+import { DeleteEnquiryButton } from "@/features/enquiries/DeleteEnquiryButton";
 import type { AdminSummary, EmailNotificationOverview, EnquiryDetail } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
 
@@ -15,6 +19,9 @@ export const metadata: Metadata = { title: "Enquiry details" };
 export default async function EnquiryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!/^\d{1,18}$/.test(id)) notFound();
+  const viewer = await getCurrentAdmin();
+  if (!can(viewer, "ENQUIRIES_VIEW")) return <NoAccess what="enquiries" />;
+  const canManage = can(viewer, "ENQUIRIES_MANAGE");
 
   const [enquiry, admins, emails] = await Promise.all([
     adminGetOrNull<EnquiryDetail>(`/admin/enquiries/${id}`),
@@ -36,7 +43,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
           </nav>
           <h1>{enquiry.fullName}</h1>
           <p>
-            <span className={styles.mono}>{enquiry.publicReference}</span> · submitted {formatDateTime(enquiry.createdAt)}
+            <span className={styles.mono}>{enquiry.publicReference}</span> · submitted <AdminDateTime iso={enquiry.createdAt} />
           </p>
         </div>
         <div className={styles.pageActions}>
@@ -48,6 +55,9 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
             <a href={`tel:${enquiry.phone.replace(/[^\d+]/g, "")}`} className="btn btn-outline btn-sm">
               <Phone size={15} aria-hidden /> Call
             </a>
+          )}
+          {can(viewer, "ENQUIRIES_DELETE") && (
+            <DeleteEnquiryButton id={enquiry.id} reference={enquiry.publicReference} name={enquiry.fullName} afterDelete="/admin/enquiries" />
           )}
         </div>
       </div>
@@ -85,7 +95,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
                     : "Direct enquiry (Legitimate interest)"}
               </dd>
               <dt>Last updated</dt>
-              <dd>{formatDateTime(enquiry.updatedAt)}</dd>
+              <dd><AdminDateTime iso={enquiry.updatedAt} /></dd>
             </dl>
             <h3 className="field-label" style={{ margin: "20px 0 8px" }}>
               Message
@@ -98,7 +108,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
               <h2 id="notes-title">Internal notes</h2>
               <p>{enquiry.notes.length} note{enquiry.notes.length === 1 ? "" : "s"}</p>
             </div>
-            <NoteForm enquiryId={enquiry.id} />
+            {canManage && <NoteForm enquiryId={enquiry.id} />}
             {enquiry.notes.length > 0 && (
               <>
                 <hr className={styles.divider} style={{ margin: "20px 0" }} />
@@ -107,7 +117,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
                     <li key={note.id}>
                       <span className={styles.note}>{note.note}</span>
                       <small>
-                        {note.adminDisplayName ?? note.adminUsername ?? "Administrator"} · {formatDateTime(note.createdAt)}
+                        {note.adminDisplayName ?? note.adminUsername ?? "Administrator"} · <AdminDateTime iso={note.createdAt} />
                       </small>
                     </li>
                   ))}
@@ -123,19 +133,27 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
               <h2 id="status-title">Status</h2>
               <StatusBadge status={enquiry.status} />
             </div>
-            <StatusForm key={enquiry.status} enquiryId={enquiry.id} status={enquiry.status} />
+            {canManage ? (
+              <StatusForm key={enquiry.status} enquiryId={enquiry.id} status={enquiry.status} />
+            ) : (
+              <p className={styles.muted}>You can view this enquiry but not change it.</p>
+            )}
           </section>
 
           <section className={styles.card} aria-labelledby="assign-title">
             <div className={styles.cardHeader}>
               <h2 id="assign-title">Assignment</h2>
             </div>
-            <AssignmentForm
-              key={enquiry.assignedAdminId ?? "none"}
-              enquiryId={enquiry.id}
-              assignedAdminId={enquiry.assignedAdminId}
-              admins={admins}
-            />
+            {canManage ? (
+              <AssignmentForm
+                key={enquiry.assignedAdminId ?? "none"}
+                enquiryId={enquiry.id}
+                assignedAdminId={enquiry.assignedAdminId}
+                admins={admins}
+              />
+            ) : (
+              <p className={styles.muted}>{enquiry.assignedAdminName ?? "Unassigned"}</p>
+            )}
           </section>
 
           <section className={styles.card} aria-labelledby="sync-title">
@@ -147,11 +165,11 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
               <dt>Attempts</dt>
               <dd>{enquiry.syncAttemptCount}</dd>
               <dt>Last update</dt>
-              <dd>{formatDateTime(enquiry.syncUpdatedAt)}</dd>
+              <dd><AdminDateTime iso={enquiry.syncUpdatedAt} /></dd>
               {enquiry.syncNextRetryAt && (
                 <>
                   <dt>Next retry</dt>
-                  <dd>{formatDateTime(enquiry.syncNextRetryAt)}</dd>
+                  <dd><AdminDateTime iso={enquiry.syncNextRetryAt} /></dd>
                 </>
               )}
               {enquiry.syncLastError && (
@@ -161,7 +179,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
                 </>
               )}
             </dl>
-            {syncRetryable && (
+            {syncRetryable && canManage && (
               <div style={{ marginTop: 16 }}>
                 <RetrySyncButton enquiryId={enquiry.id} />
               </div>
@@ -189,7 +207,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
                     )}
                   </span>
                   <small>
-                    {entry.changedBy === "SYSTEM" ? "Website" : entry.changedBy} · {formatDateTime(entry.changedAt)}
+                    {entry.changedBy === "SYSTEM" ? "Website" : entry.changedBy} · <AdminDateTime iso={entry.changedAt} />
                   </small>
                 </li>
               ))}

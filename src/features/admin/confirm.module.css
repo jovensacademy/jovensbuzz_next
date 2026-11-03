@@ -1,0 +1,37 @@
+.dialog {
+  width: min(460px, calc(100vw - 32px));
+  padding: 24px;
+  /* Opened from inside table cells: never inherit their nowrap / alignment */
+  white-space: normal;
+  text-align: left;
+  overflow-wrap: anywhere;
+  overflow-x: hidden;
+  border: 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.dialog::backdrop {
+  background: rgb(11 23 48 / 0.45);
+}
+
+.dialog h2 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.dialog p {
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+
+.error {
+  color: var(--critical);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}

@@ -39,7 +39,7 @@ Health checks: API `GET /actuator/health` (or `/api/v1/health`), web `GET /`.
 **Secrets & configuration**
 - [ ] `APP_PRODUCTION_MODE=true`. The API then refuses to start with the default JWT secret or the documented dev password.
 - [ ] `JWT_SECRET` set to a fresh random base64 value (≥ 32 bytes) and stored in a secret manager, not a file in the repo.
-- [ ] `BOOTSTRAP_ADMIN_PASSWORD` is a strong unique value. After first sign-in, change the password in the dashboard and
+- [ ] `BOOTSTRAP_ADMIN_PASSWORD` is a strong unique value. After first sign-in, set a new password under Users and
       remove the bootstrap variables.
 - [ ] Database user is a dedicated least-privilege account (see `backend/scripts/init-database.sql`), not `root`.
 - [ ] Google service account key provided via a secret store or workload identity, readable only by the API user.
@@ -87,6 +87,8 @@ Health checks: API `GET /actuator/health` (or `/api/v1/health`), web `GET /`.
 - Watch **Settings → Google Sheets integration** (or `GET /api/v1/admin/settings/integrations/google-sheets`) for
   rising `failed` counts.
 - Never log request bodies. Audit metadata deliberately excludes passwords, tokens and secrets.
+- Permanent enquiry deletion (owner only, Deleted enquiries) cannot be undone in the app; the only way back is a
+  database backup, so keep the nightly backups below. Each purge is in the audit log as `PERMANENT_DELETE_ENQUIRY`.
 
 ## Docker
 

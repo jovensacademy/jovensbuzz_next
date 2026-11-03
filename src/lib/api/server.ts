@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { internalApiBaseUrl } from "@/lib/config";
@@ -53,6 +54,5 @@ export async function adminGetOrNull<T>(path: string): Promise<T | null> {
   }
 }
 
-export async function getCurrentAdmin(): Promise<AdminProfile> {
-  return adminGet<AdminProfile>("/auth/me");
-}
+/** The signed-in admin (role, permissions, time zone); fetched once per request and shared. */
+export const getCurrentAdmin = cache(async (): Promise<AdminProfile> => adminGet<AdminProfile>("/auth/me"));

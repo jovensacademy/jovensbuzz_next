@@ -12,7 +12,7 @@ const QUICK_LINKS = [
 ];
 
 // Order follows the design. LinkedIn, Instagram and Facebook use the official URLs; the others are
-// shown only when a URL is configured in Admin → Website Content.
+// shown only when a URL is stored in site content (social_* keys).
 const SOCIAL_LINKS: { label: string; key: string; href?: string }[] = [
   { label: "LinkedIn", key: "social_linkedin", href: SOCIAL_URLS.social_linkedin },
   { label: "Instagram", key: "social_instagram", href: SOCIAL_URLS.social_instagram },

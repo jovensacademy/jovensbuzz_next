@@ -144,8 +144,109 @@ export interface AdminProfile {
   role: string;
   createdAt?: string;
   lastLoginAt?: string | null;
-  mustChangePassword: boolean;
   passwordChangedAt?: string | null;
+  /** OWNER or MANAGER */
+  adminRole: AdminRoleName;
+  /** Effective permissions (an owner holds all of them) */
+  permissions: AdminPermission[];
+  /** IANA zone used to display every date for this user, e.g. Asia/Kolkata */
+  timezone: string;
+}
+
+export type AdminRoleName = "OWNER" | "MANAGER";
+
+export type AdminPermission =
+  | "ENQUIRIES_VIEW"
+  | "ENQUIRIES_MANAGE"
+  | "ENQUIRIES_IMPORT"
+  | "ENQUIRIES_EXPORT"
+  | "ENQUIRIES_DELETE"
+  | "ANALYTICS_VIEW"
+  | "CONTENT_MANAGE"
+  | "SETTINGS_VIEW"
+  | "AUDIT_VIEW"
+  | "USERS_MANAGE";
+
+/** An account in User Management (never includes password data). */
+export interface ManagedAdminUser {
+  id: number;
+  username: string;
+  displayName: string;
+  email: string;
+  role: AdminRoleName;
+  permissions: AdminPermission[];
+  timezone: string;
+  enabled: boolean;
+  locked: boolean;
+  /** When the password was last set (never the password itself) */
+  passwordChangedAt?: string | null;
+  lastLoginAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TimeZoneOption {
+  id: string;
+  label: string;
+}
+
+export interface UserManagementOptions {
+  roles: AdminRoleName[];
+  permissions: { id: AdminPermission; label: string }[];
+  managerDefaults: AdminPermission[];
+  timezones: TimeZoneOption[];
+}
+
+export interface ImportRowValues {
+  rowNumber: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  country: string;
+  phone: string;
+  company: string;
+  service: string;
+  message: string;
+  status: string;
+  submittedAt: string;
+}
+
+export interface ImportRowResult {
+  rowNumber: number;
+  values: ImportRowValues;
+  state: "VALID" | "INVALID" | "DUPLICATE";
+  errors: string[];
+  duplicateOf?: string | null;
+}
+
+export interface ImportPreview {
+  filename: string;
+  timezone: string;
+  total: number;
+  valid: number;
+  invalid: number;
+  duplicates: number;
+  rows: ImportRowResult[];
+}
+
+export interface ImportSummary {
+  imported: number;
+  skipped: number;
+  addedToGoogleSheets: boolean;
+  timezone: string;
+  references: string[];
+}
+
+export interface DeletedEnquiry {
+  id: number;
+  publicReference: string;
+  fullName: string;
+  email: string;
+  serviceInterest: string;
+  status: string;
+  createdAt: string;
+  deletedAt: string;
+  deletedBy?: string | null;
 }
 
 export interface AdminSummary {
@@ -161,7 +262,6 @@ export interface LoginResult {
   email: string;
   role: string;
   expiresAt: string;
-  mustChangePassword: boolean;
 }
 
 export interface IntegrationStatus {

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { ServiceManager } from "@/features/content/ServiceManager";
-import { adminGet } from "@/lib/api/server";
+import { adminGet, getCurrentAdmin } from "@/lib/api/server";
+import { can } from "@/lib/admin-access";
+import { NoAccess } from "@/features/admin/NoAccess";
 import type { ServiceItem } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
 
 export const metadata: Metadata = { title: "Services" };
 
 export default async function ServicesAdminPage() {
+  if (!can(await getCurrentAdmin(), "CONTENT_MANAGE")) return <NoAccess what="services" />;
   const services = await adminGet<ServiceItem[]>("/admin/services");
   return (
     <>

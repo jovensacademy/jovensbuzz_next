@@ -19,7 +19,7 @@ interface PhoneFieldProps {
 }
 
 /**
- * International phone input: a country selector (flag, ISO code, dial code) attached to the
+ * International phone input: a country selector (flag, dial code) attached to the
  * number field. The selector is an accessible select-only combobox (see useDropdown) and reuses
  * the original select styling so it sits exactly where the old country-code select was.
  */
@@ -64,8 +64,9 @@ export function PhoneField({
         onClick={dropdown.toggle}
         onKeyDown={dropdown.onKeyDown}
       >
+        {/* Flag + dial code; the dropdown arrow comes from the select styling. The ISO country is kept
+            in the accessible name (US and CA share +1, so the flag, not the dial code, identifies it). */}
         <CountryFlag iso={selected.iso} />
-        <span className="jb-phone__trigger-iso">{selected.iso}</span>
         <span className="jb-phone__trigger-dial">{selected.dialCode}</span>
       </button>
 
@@ -89,7 +90,7 @@ export function PhoneField({
                 onPointerEnter={() => dropdown.setActiveIndex(index)}
                 onClick={() => dropdown.choose(index)}
               >
-                <span className="jb-phone__chip">{option.iso}</span>
+                <CountryFlag iso={option.iso} />
                 <span className="jb-phone__name">{option.name}</span>
                 <span className="jb-phone__dial">{option.dialCode}</span>
                 <CheckMark visible={isSelected} />

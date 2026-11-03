@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { ArrowDown, ArrowUp, Inbox } from "lucide-react";
 import { StatusBadge, SyncBadge } from "@/features/admin/Badges";
-import { formatDateTime } from "@/lib/format";
+import { AdminDateTime } from "@/features/admin/AdminTime";
 import type { EnquirySummary } from "@/types/api";
+import { DeleteEnquiryButton } from "./DeleteEnquiryButton";
 import styles from "@/features/admin/admin.module.css";
 
 export interface SortState {
@@ -27,11 +28,17 @@ export function EnquiryTable({
   compact = false,
   sort,
   caption = "Enquiries",
+  canDelete = false,
+  withFooter = false,
 }: {
   enquiries: EnquirySummary[];
   compact?: boolean;
   sort?: SortState;
   caption?: string;
+  /** Show a Delete action (the API also requires PERM_ENQUIRIES_DELETE) */
+  canDelete?: boolean;
+  /** A pagination footer follows inside the same card, so the table must not bleed to the card bottom */
+  withFooter?: boolean;
 }) {
   if (enquiries.length === 0) {
     return (
@@ -47,7 +54,7 @@ export function EnquiryTable({
     sort?.sortBy === field ? (sort.sortDir === "asc" ? "ascending" : "descending") : undefined;
 
   return (
-    <div className={styles.tableWrap}>
+    <div className={`${styles.tableWrap} ${withFooter ? styles.tableWrapWithFooter : ""}`}>
       <table className={styles.table}>
         <caption className="visually-hidden">{caption}</caption>
         <thead>
@@ -75,7 +82,7 @@ export function EnquiryTable({
             </th>
             {!compact && <th scope="col">Assigned</th>}
             {!compact && <th scope="col">Sheets</th>}
-            <th scope="col">
+            <th scope="col" className={styles.actionsCell}>
               <span className="visually-hidden">Actions</span>
             </th>
           </tr>
@@ -93,7 +100,7 @@ export function EnquiryTable({
               {!compact && <td className={styles.nowrap}>{enquiry.phone ?? "—"}</td>}
               {!compact && <td>{enquiry.companyName || "—"}</td>}
               <td>{enquiry.serviceInterest}</td>
-              <td className={styles.nowrap}>{formatDateTime(enquiry.createdAt)}</td>
+              <td className={styles.nowrap}><AdminDateTime iso={enquiry.createdAt} /></td>
               <td>
                 <StatusBadge status={enquiry.status} />
               </td>
@@ -103,10 +110,13 @@ export function EnquiryTable({
                   <SyncBadge status={enquiry.syncStatus} />
                 </td>
               )}
-              <td>
-                <Link href={`/admin/enquiries/${enquiry.id}`} className="btn btn-outline btn-sm">
-                  View<span className="visually-hidden"> enquiry {enquiry.publicReference}</span>
-                </Link>
+              <td className={styles.actionsCell}>
+                <span className={styles.rowActions}>
+                  <Link href={`/admin/enquiries/${enquiry.id}`} className="btn btn-outline btn-sm">
+                    View<span className="visually-hidden"> enquiry {enquiry.publicReference}</span>
+                  </Link>
+                  {canDelete && <DeleteEnquiryButton id={enquiry.id} reference={enquiry.publicReference} name={enquiry.fullName} compact />}
+                </span>
               </td>
             </tr>
           ))}
