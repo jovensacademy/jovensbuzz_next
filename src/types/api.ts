@@ -153,7 +153,7 @@ export interface AdminProfile {
   timezone: string;
 }
 
-export type AdminRoleName = "OWNER" | "MANAGER";
+export type AdminRoleName = "OWNER" | "MANAGER" | "USER";
 
 export type AdminPermission =
   | "ENQUIRIES_VIEW"
@@ -194,6 +194,9 @@ export interface UserManagementOptions {
   roles: AdminRoleName[];
   permissions: { id: AdminPermission; label: string }[];
   managerDefaults: AdminPermission[];
+  /** The read-only permissions a USER may hold, and what a new user gets by default */
+  userPermissions: AdminPermission[];
+  userDefaults: AdminPermission[];
   timezones: TimeZoneOption[];
 }
 

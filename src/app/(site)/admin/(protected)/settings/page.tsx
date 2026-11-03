@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CircleCheck, CircleX } from "lucide-react";
 import { ProfileForm, RetryFailedSyncs } from "@/features/settings/SettingsForms";
-import { adminGet, getCurrentAdmin } from "@/lib/api/server";
+import { adminGet, getCurrentAdmin, startAdminGet } from "@/lib/api/server";
 import { can } from "@/lib/admin-access";
 import type { TimeZoneOption } from "@/types/api";
 import { titleCase } from "@/lib/format";
@@ -16,15 +16,20 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
   const { auditPage } = await searchParams;
   const page = Math.max(1, Number.parseInt(auditPage ?? "1", 10) || 1);
 
-  const admin = await getCurrentAdmin();
-  // Each section is loaded only when this account may see it (the API enforces the same rules)
-  const showIntegrations = can(admin, "SETTINGS_VIEW");
-  const [sheets, email, audit, timezones] = await Promise.all([
-    showIntegrations ? adminGet<IntegrationStatus>("/admin/settings/integrations/google-sheets") : null,
-    showIntegrations ? adminGet<EmailIntegrationStatus>("/admin/settings/integrations/email") : null,
-    can(admin, "AUDIT_VIEW") ? adminGet<Paged<AuditLogEntry>>(`/admin/audit-logs?page=${page - 1}&size=15`) : null,
+  // All sections are requested at once, in parallel with the profile lookup; a section this account may
+  // not see answers 403 (null) and is not shown. The API enforces the same rules.
+  const requests = Promise.all([
+    startAdminGet<IntegrationStatus>("/admin/settings/integrations/google-sheets"),
+    startAdminGet<EmailIntegrationStatus>("/admin/settings/integrations/email"),
+    startAdminGet<Paged<AuditLogEntry>>(`/admin/audit-logs?page=${page - 1}&size=15`),
     adminGet<TimeZoneOption[]>("/auth/timezones").catch(() => [] as TimeZoneOption[]),
   ]);
+  const admin = await getCurrentAdmin();
+  const showIntegrations = can(admin, "SETTINGS_VIEW");
+  const [sheetsData, emailData, auditData, timezones] = await requests;
+  const sheets = showIntegrations ? sheetsData : null;
+  const email = showIntegrations ? emailData : null;
+  const audit = can(admin, "AUDIT_VIEW") ? auditData : null;
 
   const checks = !sheets ? [] : [
     { ok: sheets.spreadsheetIdSet, label: "Spreadsheet ID configured", detail: sheets.spreadsheetIdHint ? `ends ${sheets.spreadsheetIdHint}` : "GOOGLE_SHEETS_SPREADSHEET_ID" },

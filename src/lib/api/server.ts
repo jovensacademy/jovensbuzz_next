@@ -21,7 +21,13 @@ export class ApiError extends Error {
  * it as a Bearer token; data is never cached and never exposed to the browser bundle.
  * Redirects to the login page when the session is missing or rejected.
  */
-export async function adminGet<T>(path: string): Promise<T> {
+export function adminGet<T>(path: string): Promise<T> {
+  return memoizedGet(path) as Promise<T>;
+}
+
+// One backend call per path per render: layout and page asking for the same data share it.
+// (fetch's own de-duplication does not apply here because each request carries an abort signal.)
+const memoizedGet = cache(async (path: string): Promise<unknown> => {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) redirect("/admin/login");
 
@@ -37,11 +43,25 @@ export async function adminGet<T>(path: string): Promise<T> {
   }
 
   if (res.status === 401) redirect("/admin/login?expired=1");
-  const body = (await res.json().catch(() => ({}))) as ApiEnvelope<T>;
+  const body = (await res.json().catch(() => ({}))) as ApiEnvelope<unknown>;
   if (!res.ok || !body.success) {
     throw new ApiError(res.status, body.message ?? `Request failed (${res.status})`, body.errors);
   }
-  return body.data as T;
+  return body.data;
+});
+
+/**
+ * Starts a GET now, so it runs in parallel with the profile lookup (getCurrentAdmin) instead of after it.
+ * Resolves to null on 403 (the page then shows NoAccess) and never surfaces as an unhandled rejection
+ * when the page returns early without awaiting it.
+ */
+export function startAdminGet<T>(path: string): Promise<T | null> {
+  const request = adminGet<T>(path).catch((error) => {
+    if (error instanceof ApiError && error.status === 403) return null;
+    throw error;
+  });
+  request.catch(() => {});
+  return request;
 }
 
 /** Same as adminGet but returns null for 404 instead of throwing. */

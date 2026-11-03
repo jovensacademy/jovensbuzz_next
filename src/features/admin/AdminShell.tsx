@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
 import { CSRF_HEADER } from "@/lib/auth/session";
-import { can } from "@/lib/admin-access";
+import { can, roleLabel } from "@/lib/admin-access";
 import type { AdminPermission, AdminRoleName, EnquirySummary } from "@/types/api";
 import { AdminDateTime, AdminTimeZoneProvider } from "./AdminTime";
 import styles from "./admin.module.css";
@@ -125,6 +125,7 @@ export function AdminShell({ admin, notifications, children }: ShellProps) {
                     >
                       <Icon size={19} aria-hidden />
                       {label}
+                      <NavPending />
                       {href === "/admin/enquiries" && notifications.newEnquiries > 0 && (
                         <span className={styles.navBadge}>
                           {notifications.newEnquiries}
@@ -222,7 +223,7 @@ export function AdminShell({ admin, notifications, children }: ShellProps) {
                     <span className={styles.profileText}>
                       <strong>{admin.displayName}</strong>
                       <small>
-                        {admin.role === "OWNER" ? "Owner" : "Manager"} · {admin.timezone}
+                        {roleLabel(admin.role)} · {admin.timezone}
                       </small>
                     </span>
                     <ChevronDown size={16} aria-hidden />
@@ -306,4 +307,10 @@ function Dropdown({
       {open && <div className={styles.menu}>{children}</div>}
     </div>
   );
+}
+
+/** Spinner on the sidebar link whose page is loading (must render inside that Link). */
+function NavPending() {
+  const { pending } = useLinkStatus();
+  return pending ? <span className={styles.navPending} data-loading="" aria-hidden /> : null;
 }

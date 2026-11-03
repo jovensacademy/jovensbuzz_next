@@ -8,7 +8,7 @@ import { enquiryListHref, parseEnquiryQuery } from "@/features/enquiries/query";
 import { NoAccess } from "@/features/admin/NoAccess";
 import { adminTimezone, zonedDayBoundary } from "@/features/admin/time";
 import { can } from "@/lib/admin-access";
-import { adminGet, getCurrentAdmin } from "@/lib/api/server";
+import { getCurrentAdmin, startAdminGet } from "@/lib/api/server";
 import { formatNumber } from "@/lib/format";
 import type { EnquirySummary, Paged } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
@@ -20,13 +20,12 @@ export default async function EnquiriesPage({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const admin = await getCurrentAdmin();
-  if (!can(admin, "ENQUIRIES_VIEW")) return <NoAccess what="enquiries" />;
   const params = await searchParams;
   const query = parseEnquiryQuery(params);
   const deletedRef = deletedReference(params.deleted);
-  const canDelete = can(admin, "ENQUIRIES_DELETE");
-  const tz = await adminTimezone();
+  // The zone is only needed to turn date filters into instants; without them the list is requested
+  // in parallel with the profile lookup instead of after it.
+  const tz = query.from || query.to ? await adminTimezone() : "UTC";
 
   const apiParams = new URLSearchParams();
   if (query.search) apiParams.set("search", query.search);
@@ -41,10 +40,13 @@ export default async function EnquiriesPage({
   apiParams.set("sortBy", query.sortBy);
   apiParams.set("sortDir", query.sortDir);
 
-  const [result, options] = await Promise.all([
-    adminGet<Paged<EnquirySummary>>(`/admin/enquiries?${apiParams}`),
-    adminGet<{ statuses: string[]; services: string[] }>(`/admin/enquiries/filter-options`),
-  ]);
+  const resultRequest = startAdminGet<Paged<EnquirySummary>>(`/admin/enquiries?${apiParams}`);
+  const optionsRequest = startAdminGet<{ statuses: string[]; services: string[] }>(`/admin/enquiries/filter-options`);
+  const admin = await getCurrentAdmin();
+  if (!can(admin, "ENQUIRIES_VIEW")) return <NoAccess what="enquiries" />;
+  const canDelete = can(admin, "ENQUIRIES_DELETE");
+  const [result, options] = await Promise.all([resultRequest, optionsRequest]);
+  if (!result || !options) return <NoAccess what="enquiries" />;
 
   const exportHref = `/api/admin/admin/enquiries/export${filterString ? `?${filterString}` : ""}`;
   // Excel export: exactly the filters on screen plus the current sort, every matching row (not just this page)

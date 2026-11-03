@@ -6,7 +6,7 @@ import { AdminDateTime } from "@/features/admin/AdminTime";
 import { deletedReference } from "@/features/enquiries/DeletedNotice";
 import { PermanentDeleteButton } from "@/features/enquiries/PermanentDeleteButton";
 import { can } from "@/lib/admin-access";
-import { adminGet, getCurrentAdmin } from "@/lib/api/server";
+import { getCurrentAdmin, startAdminGet } from "@/lib/api/server";
 import { titleCase } from "@/lib/format";
 import type { DeletedEnquiry } from "@/types/api";
 import styles from "@/features/admin/admin.module.css";
@@ -18,12 +18,14 @@ export default async function DeletedEnquiriesPage({
 }: {
   searchParams: Promise<{ purged?: string | string[] }>;
 }) {
+  const request = startAdminGet<DeletedEnquiry[]>("/admin/enquiries/deleted"); // in parallel with the profile lookup
   const admin = await getCurrentAdmin();
   if (!can(admin, "ENQUIRIES_DELETE")) return <NoAccess what="deleted enquiries" />;
   // Permanent deletion is owner-only (the API enforces it too)
   const canPurge = admin.adminRole === "OWNER";
   const purgedRef = deletedReference((await searchParams).purged);
-  const deleted = await adminGet<DeletedEnquiry[]>("/admin/enquiries/deleted");
+  const deleted = await request;
+  if (!deleted) return <NoAccess what="deleted enquiries" />;
 
   return (
     <>

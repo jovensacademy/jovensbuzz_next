@@ -1,5 +1,5 @@
 import { AdminShell } from "@/features/admin/AdminShell";
-import { adminGet, getCurrentAdmin } from "@/lib/api/server";
+import { getCurrentAdmin, startAdminGet } from "@/lib/api/server";
 import { adminTimezone } from "@/features/admin/time";
 import { can } from "@/lib/admin-access";
 import type { DashboardSummary } from "@/types/api";
@@ -8,11 +8,11 @@ import type { DashboardSummary } from "@/types/api";
 export const dynamic = "force-dynamic";
 
 export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
+  // Requested together with the profile: without tz the API uses the account's own zone (= adminTimezone)
+  const summaryRequest = startAdminGet<DashboardSummary>("/admin/dashboard/summary");
   const admin = await getCurrentAdmin();
   const timezone = await adminTimezone();
-  const summary = can(admin, "ANALYTICS_VIEW")
-    ? await adminGet<DashboardSummary>(`/admin/dashboard/summary?tz=${encodeURIComponent(timezone)}`).catch(() => null)
-    : null;
+  const summary = can(admin, "ANALYTICS_VIEW") ? await summaryRequest.catch(() => null) : null;
 
   return (
     <AdminShell

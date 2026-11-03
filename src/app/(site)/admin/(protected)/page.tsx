@@ -35,19 +35,22 @@ export default async function OverviewPage({
 }) {
   const { range: rangeParam, deleted } = await searchParams;
   const days = RANGES.find((r) => String(r) === rangeParam) ?? 30;
+  // Started before the profile lookup; without tz the API uses the account's own zone. The summary
+  // request is shared with the layout (same path), so it is made once.
+  const data = Promise.all([
+    adminGet<DashboardSummary>("/admin/dashboard/summary"),
+    adminGet<TrendPoint[]>(`/admin/dashboard/enquiry-trends?days=${days}`),
+    adminGet<ServiceDistribution[]>(`/admin/dashboard/service-distribution`),
+    adminGet<StatusDistribution[]>(`/admin/dashboard/status-distribution`),
+  ]);
+  data.catch(() => {}); // a manager without analytics is redirected below without awaiting it
   const admin = await getCurrentAdmin();
   if (!can(admin, "ANALYTICS_VIEW")) redirect(homePathFor(admin)); // e.g. a manager without analytics
   const canDelete = can(admin, "ENQUIRIES_DELETE");
   const deletedRef = deletedReference(deleted);
   const zone = await adminTimezone();
-  const tz = encodeURIComponent(zone);
 
-  const [summary, trends, services, statuses] = await Promise.all([
-    adminGet<DashboardSummary>(`/admin/dashboard/summary?tz=${tz}`),
-    adminGet<TrendPoint[]>(`/admin/dashboard/enquiry-trends?days=${days}&tz=${tz}`),
-    adminGet<ServiceDistribution[]>(`/admin/dashboard/service-distribution`),
-    adminGet<StatusDistribution[]>(`/admin/dashboard/status-distribution`),
-  ]);
+  const [summary, trends, services, statuses] = await data;
 
   const kpis = [
     { label: "Total enquiries", value: summary.totalEnquiries, Icon: Inbox, href: "/admin/enquiries", featured: true },

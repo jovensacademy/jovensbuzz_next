@@ -960,3 +960,30 @@ a.cellPrimary:hover {
     padding: 0;
   }
 }
+
+/* Sidebar link waiting for its page (useLinkStatus): instant feedback without a Suspense fallback,
+   which React would keep on screen for at least ~300 ms and so slow down fast navigations */
+.navPending {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: navSpin 0.7s linear infinite;
+}
+
+@keyframes navSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navPending {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.5;
+  }
+}

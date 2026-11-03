@@ -1,4 +1,4 @@
-import type { AdminPermission, AdminProfile } from "@/types/api";
+import type { AdminPermission, AdminProfile, AdminRoleName } from "@/types/api";
 
 /**
  * UI mirror of the API's permission checks. The API is the authority (it returns 403 regardless);
@@ -14,6 +14,11 @@ export function homePathFor(admin: Pick<AdminProfile, "permissions">): string {
   if (can(admin, "ENQUIRIES_VIEW")) return "/admin/enquiries";
   if (can(admin, "CONTENT_MANAGE")) return "/admin/services";
   return "/admin/settings";
+}
+
+/** Display name of a dashboard role. */
+export function roleLabel(role: AdminRoleName): string {
+  return role === "OWNER" ? "Owner" : role === "MANAGER" ? "Manager" : "User";
 }
 
 export const PERMISSION_LABELS: Record<AdminPermission, string> = {

@@ -175,3 +175,32 @@
   overflow-wrap: anywhere;
   user-select: all;
 }
+
+/* Username / email / role in the delete confirmation */
+.deleteSummary {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 4px 12px;
+  margin: 0 0 12px;
+}
+
+.deleteSummary dt {
+  color: var(--ink-500);
+}
+
+.deleteSummary dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Row delete icon: the column takes only the icon's width so the table keeps fitting the card */
+.layout .actionCell {
+  width: 1%;
+  padding-left: 0;
+}
+
+/* Long usernames/emails wrap (preferably before the @) so the table fits the card instead of scrolling */
+.userCell {
+  overflow-wrap: anywhere;
+}

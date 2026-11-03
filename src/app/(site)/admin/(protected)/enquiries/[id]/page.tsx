@@ -19,15 +19,18 @@ export const metadata: Metadata = { title: "Enquiry details" };
 export default async function EnquiryDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!/^\d{1,18}$/.test(id)) notFound();
-  const viewer = await getCurrentAdmin();
-  if (!can(viewer, "ENQUIRIES_VIEW")) return <NoAccess what="enquiries" />;
-  const canManage = can(viewer, "ENQUIRIES_MANAGE");
-
-  const [enquiry, admins, emails] = await Promise.all([
+  // Started in parallel with the profile lookup instead of after it
+  const data = Promise.all([
     adminGetOrNull<EnquiryDetail>(`/admin/enquiries/${id}`),
     adminGet<AdminSummary[]>(`/admin/users`),
     adminGetOrNull<EmailNotificationOverview>(`/admin/enquiries/${id}/notifications`),
   ]);
+  data.catch(() => {}); // not awaited when the viewer may not see enquiries
+  const viewer = await getCurrentAdmin();
+  if (!can(viewer, "ENQUIRIES_VIEW")) return <NoAccess what="enquiries" />;
+  const canManage = can(viewer, "ENQUIRIES_MANAGE");
+
+  const [enquiry, admins, emails] = await data;
   if (!enquiry) notFound();
 
   const syncRetryable = enquiry.syncStatus !== "SUCCESS" && enquiry.syncStatus !== "PROCESSING";
