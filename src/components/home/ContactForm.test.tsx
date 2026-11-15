@@ -42,7 +42,10 @@ async function fillValid(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText("Email"), "ada@example.com");
   await user.type(screen.getByLabelText("Phone"), "2015550123");
   await chooseService(user, "Short-Form Video Production");
+  await user.click(consentBox());
 }
+
+const consentBox = () => screen.getByRole("checkbox", { name: /privacy policy/i });
 
 const submit = (user: ReturnType<typeof userEvent.setup>) => user.click(screen.getByRole("button", { name: /discover your buzz/i }));
 
@@ -185,11 +188,43 @@ describe("homepage ContactForm", () => {
     expect(screen.getByRole("combobox", { name: /country/i })).toHaveAccessibleName(/Canada/);
   });
 
-  it("does not render a privacy consent checkbox or agreement text", () => {
+  it("renders an unchecked, required consent checkbox where only “privacy policy” is a link", () => {
     mockApi();
     renderForm();
-    expect(screen.queryByRole("checkbox", { name: /privacy policy/i })).not.toBeInTheDocument();
-    expect(screen.queryByText(/I agree that Jovens Buzz may use these details/i)).not.toBeInTheDocument();
+    const box = consentBox();
+    expect(box).not.toBeChecked();
+    expect(box).toBeRequired();
+    expect(box).toHaveAccessibleName("I confirm that I have read and accept the terms and conditions and privacy policy.");
+    const text = document.getElementById(box.getAttribute("aria-labelledby")!)!;
+    expect(text.tagName).toBe("SPAN"); // not a <label>: the rest of the sentence is not clickable
+    const links = within(text).getAllByRole("link");
+    expect(links.map((a) => [a.textContent, a.getAttribute("href")])).toEqual([["privacy policy", "/privacy-policy"]]);
+  });
+
+  it("blocks submission without consent, shows the message, and clears it once checked", async () => {
+    const user = userEvent.setup();
+    const fetchSpy = mockApi({
+      enquiry: () => json(201, { success: true, data: { publicReference: "JB-2026-ABC234", submittedAt: "", duplicate: false } }),
+    });
+    renderForm();
+    await fillValid(user);
+    await user.click(consentBox()); // untick
+    await submit(user);
+
+    const message = "Please accept the Privacy Policy before submitting the form.";
+    expect(screen.getByText(message)).toBeInTheDocument();
+    expect(consentBox()).toHaveAttribute("aria-invalid", "true");
+    expect(consentBox()).toHaveAccessibleDescription(message);
+    expect(consentBox()).toHaveFocus();
+    expect(fetchSpy.mock.calls.some(([url]) => String(url).endsWith("/enquiries"))).toBe(false);
+
+    await user.keyboard(" "); // keyboard toggles it
+    expect(consentBox()).toBeChecked();
+    expect(screen.queryByText(message)).not.toBeInTheDocument();
+    await submit(user);
+    await screen.findByRole("dialog", { name: "Your Buzz Starts Here." });
+    expect(fetchSpy.mock.calls.filter(([url]) => String(url).endsWith("/enquiries"))).toHaveLength(1);
+    expect(consentBox()).not.toBeChecked(); // reset with the rest of the form
   });
 
   it("validates required fields, email format and phone before submitting", async () => {
@@ -207,7 +242,7 @@ describe("homepage ContactForm", () => {
     }
     expect(screen.getByLabelText("Phone")).toHaveValue("12"); // letters are never accepted
     expect(serviceSelect()).toHaveClass("is-invalid");
-    expect(screen.queryByText(/Please agree to the Privacy Policy/)).not.toBeInTheDocument();
+    expect(screen.getByText("Please accept the Privacy Policy before submitting the form.")).toBeInTheDocument();
     expect(screen.getByLabelText("First name")).toHaveFocus();
     expect(fetchSpy.mock.calls.some(([url]) => String(url).endsWith("/enquiries"))).toBe(false);
   });
@@ -239,7 +274,7 @@ describe("homepage ContactForm", () => {
       phoneCountry: "US",
       serviceId: 4,
       serviceInterest: "Short-Form Video Production",
-      privacyConsent: false,
+      privacyConsent: true,
       privacyPolicyVersion: "2026-10",
     });
     expect(body).not.toHaveProperty("platforms");
@@ -278,6 +313,7 @@ describe("homepage ContactForm", () => {
     await user.type(screen.getByLabelText("Email"), "ada@example.com");
     await user.type(screen.getByLabelText("Phone"), local);
     await chooseService(user, "Short-Form Video Production");
+    await user.click(consentBox());
     await submit(user);
     await screen.findByRole("dialog", { name: "Your Buzz Starts Here." });
 

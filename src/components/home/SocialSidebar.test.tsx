@@ -1,5 +1,5 @@
 import { act, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { SOCIAL_URLS } from "@/lib/content-defaults";
 import { SocialSidebar } from "./SocialSidebar";
 
@@ -59,5 +59,37 @@ describe("SocialSidebar", () => {
     expect(bar).not.toHaveAttribute("inert");
     await scrollTo(500);
     expect(bar).toHaveAttribute("inert");
+  });
+  describe("with the page footer on screen", () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      document.querySelectorAll("footer").forEach((el) => el.remove());
+    });
+
+    it("steps aside while the footer is visible and comes back once it scrolls away", async () => {
+      let notify: (visible: boolean) => void = () => {};
+      vi.stubGlobal(
+        "IntersectionObserver",
+        class {
+          constructor(cb: IntersectionObserverCallback) {
+            notify = (visible) => act(() => cb([{ isIntersecting: visible } as IntersectionObserverEntry], this as unknown as IntersectionObserver));
+          }
+          observe() {}
+          disconnect() {}
+        },
+      );
+      document.body.appendChild(document.createElement("footer"));
+      await scrollTo(0);
+      renderBar();
+      const bar = screen.getByRole("complementary", { name: /social media/i, hidden: true });
+      await scrollTo(2000);
+      expect(bar).not.toHaveAttribute("inert");
+      notify(true); // footer enters the viewport
+      expect(bar).toHaveAttribute("inert");
+      await scrollTo(2100); // still over the footer: stays hidden
+      expect(bar).toHaveAttribute("inert");
+      notify(false); // scrolled back up, footer gone
+      expect(bar).not.toHaveAttribute("inert");
+    });
   });
 });

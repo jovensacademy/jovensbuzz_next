@@ -930,11 +930,11 @@
 .how-we-work-deliverables-section-main__floating-logo {
   position: absolute;
   left: 20.6%;
-  top: 6%;                    /* sits down on the pedestal top (no gap) */
+  top: 8%;                    /* sits down on the pedestal top (no gap) */
   width: 62.6%;
   height: auto;
   filter: drop-shadow(0 calc(18 * var(--a)) calc(22 * var(--a)) rgba(150, 60, 0, .28));
-  animation: how-we-work-logo-float 7s ease-in-out infinite;
+  /* animation: how-we-work-logo-float 7s ease-in-out infinite; */
   will-change: transform;
 }
 /* left → right → back to the left only (no vertical movement): one smooth, seamless loop */

@@ -76,7 +76,8 @@ export function Footer({ content, current }: { content: SiteContent; current?: F
 
       <div className={styles.bottom}>
         <Link href="/" className={styles.logo} aria-label="Jovens Buzz – Get Seen. Get Growing. Back to top">
-          <img src="/assets/images/footer-logo.svg" alt="Jovens Buzz – Get Seen. Get Growing" width={146} height={55} loading="lazy" />
+          <img  data-aos="zoom-in"
+  data-aos-once="true"  src="/assets/images/footer-logo.svg" alt="Jovens Buzz – Get Seen. Get Growing" width={146} height={55}  />
         </Link>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- footer markup kept as-is; flagged only since the top-level /[slug] service route exists */}
         <a href="/privacy-policy" className={styles.privacy}>

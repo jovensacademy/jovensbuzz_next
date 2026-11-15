@@ -569,6 +569,7 @@
 .about-team-section-main {
   padding: max(64px, calc(80 * var(--a))) 0 max(56px, calc(79 * var(--a)));
   background: #fff;
+  display: none;
 }
 .about-team-section-main__header { --bs-gutter-y: 16px; }
 .about-team-section-main__title {

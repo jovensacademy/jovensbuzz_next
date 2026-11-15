@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import type { CountryCode } from "libphonenumber-js/max";
 import { publicApiBaseUrl } from "@/lib/config";
@@ -13,6 +14,7 @@ import { SuccessModal } from "./SuccessModal";
 type Status = { type: "" | "error"; content: React.ReactNode };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const CONSENT_ERROR = "Please accept the Privacy Policy before submitting the form.";
 
 /**
  * The original "Let’s Talk !" form (same markup and classes) submitting to the Spring Boot API.
@@ -110,6 +112,8 @@ export function ContactForm({
         if (services.status === "loading") return "Please wait while we load the services.";
         if (services.status === "error") return "Services couldn’t be loaded. Please try again.";
         return selectedService ? null : "Please choose how we can help.";
+      case "privacy_consent":
+        return field?.checked ? null : CONSENT_ERROR;
       default:
         return null;
     }
@@ -143,7 +147,7 @@ export function ContactForm({
     if (inFlight.current) return;
     const form = formRef.current!;
 
-    const names = ["first_name", "last_name", "email", "phone", "service"];
+    const names = ["first_name", "last_name", "email", "phone", "service", "privacy_consent"];
     const found: Record<string, string> = {};
     for (const name of names) {
       const message = validateField(name);
@@ -171,7 +175,7 @@ export function ContactForm({
       serviceId: selectedService.id,
       serviceTitle: selectedService.title,
       message: String(data.get("message") ?? ""),
-      privacyConsent: false,
+      privacyConsent: data.get("privacy_consent") === "on", // always true here: submission is blocked without it
       website: String(data.get("website") ?? ""),
     });
 
@@ -377,6 +381,33 @@ export function ContactForm({
               maxLength={3800}
               placeholder="To better assist you, please describe how we can help..."
             />
+          </div>
+          <div className="col-12">
+            {/* Named by the sentence (aria-labelledby) rather than a <label>, so only "privacy policy" is clickable */}
+            <div className="contact-form-section-main__consent">
+              <input
+                className={cls("privacy_consent", "contact-form-section-main__checkbox")}
+                id={`${idPrefix}sfmConsent`}
+                name="privacy_consent"
+                type="checkbox"
+                aria-labelledby={`${idPrefix}sfmConsentText`}
+                aria-describedby={errors.privacy_consent ? `${idPrefix}sfmConsentError` : undefined}
+                aria-invalid={ariaInvalid("privacy_consent")}
+                required
+              />
+              <span className="contact-form-section-main__consent-text" id={`${idPrefix}sfmConsentText`}>
+                I confirm that I have read and accept the terms and conditions and{" "}
+                <Link href="/privacy-policy" className="contact-form-section-main__consent-link">
+                  privacy policy
+                </Link>
+                .
+              </span>
+            </div>
+            {errors.privacy_consent && (
+              <div className="invalid-feedback contact-form-section-main__error d-block" id={`${idPrefix}sfmConsentError`}>
+                {errors.privacy_consent}
+              </div>
+            )}
           </div>
         </div>
 

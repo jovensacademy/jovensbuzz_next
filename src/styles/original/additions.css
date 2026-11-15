@@ -534,3 +534,46 @@
    clicks through to it, so anywhere on a card navigates. Hover/open animations are unchanged. */
 .services-section-main__panel--active .services-section-main__trigger { cursor: pointer; }
 .services-section-main__desc { pointer-events: none; }
+
+/* ---- Contact form: privacy policy consent (below Message, above the submit button) ---- */
+.contact-form-section-main__consent {
+  display: flex;
+  align-items: flex-start;
+  gap: max(10px, calc(12 * var(--u)));
+}
+.contact-form-section-main__checkbox {
+  flex: none;
+  width: max(18px, calc(20 * var(--u)));
+  height: max(18px, calc(20 * var(--u)));
+  margin: 0.2em 0 0;
+  border: 1.518px solid #d1d5db;
+  border-radius: 4px;
+  accent-color: #f98d01;
+  cursor: pointer;
+}
+.contact-form-section-main__checkbox:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(249, 141, 1, .35);
+}
+.contact-form-section-main__checkbox.is-invalid {
+  outline: 1.5px solid #dc3545;
+  outline-offset: 1px;
+}
+.contact-form-section-main__consent-text {
+  font-size: max(14px, calc(17 * var(--u)));
+  line-height: 1.5;
+  color: #374151;
+}
+.contact-form-section-main__consent-link {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.contact-form-section-main__consent-link:hover { color: #f98d01; }
+.contact-form-section-main__consent-link:focus-visible {
+  outline: 2px solid #f98d01;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.contact-form-section-main__consent + .contact-form-section-main__error { margin-top: 6px; }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
 import styles from "./SocialSidebar.module.css";
 
 // Shown once the page has scrolled past ~600px; the small gap stops it flickering at the threshold
@@ -16,25 +17,53 @@ const WHATSAPP_URL = "https://wa.me/19592000495";
 
 /**
  * Floating LinkedIn / Instagram / WhatsApp / Call bar on the right edge. Visibility is toggled on the DOM node
- * (no React re-render per scroll) from a passive, rAF-throttled scroll listener; while hidden it is
- * `inert`, so its links are not focusable. On phones it also steps aside while a form field has focus.
+ * (no React re-render per scroll): it shows once the page has scrolled past ~600px (passive, rAF-throttled
+ * scroll listener) and steps aside while the page footer is on screen (IntersectionObserver), so it never
+ * covers the footer links. While hidden it is `inert`, so its links are not focusable. On phones it also
+ * steps aside while a form field has focus.
  */
 export function SocialSidebar({ linkedin, instagram, phone }: Props) {
   const ref = useRef<HTMLElement>(null);
+  // Both conditions live in a ref so the scroll listener and the footer observer share one source of truth
+  const state = useRef({ scrolled: false, footerInView: false, shown: false });
+  const pathname = usePathname();
+
+  const sync = useCallback(() => {
+    const bar = ref.current;
+    const s = state.current;
+    const show = s.scrolled && !s.footerInView;
+    if (!bar || show === s.shown) return;
+    s.shown = show;
+    bar.classList.toggle(styles.visible, show);
+    bar.toggleAttribute("inert", !show);
+  }, []);
+
+  // Hide while the footer is visible. Re-run per route: the footer belongs to each page, not to this layout.
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer || typeof IntersectionObserver === "undefined") return;
+    const s = state.current;
+    const observer = new IntersectionObserver(([entry]) => {
+      s.footerInView = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(footer);
+    return () => {
+      observer.disconnect();
+      s.footerInView = false;
+    };
+  }, [pathname, sync]);
 
   useEffect(() => {
     const bar = ref.current;
     if (!bar) return;
-    let visible = false;
     let frame = 0;
     const apply = () => {
       frame = 0;
       const y = window.scrollY;
-      const next = visible ? y > HIDE_BEFORE : y > SHOW_AFTER;
-      if (next === visible) return;
-      visible = next;
-      bar.classList.toggle(styles.visible, visible);
-      bar.toggleAttribute("inert", !visible);
+      const s = state.current;
+      s.scrolled = s.scrolled ? y > HIDE_BEFORE : y > SHOW_AFTER;
+      sync();
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(apply);
@@ -52,7 +81,7 @@ export function SocialSidebar({ linkedin, instagram, phone }: Props) {
       document.removeEventListener("focusout", onFocusOut);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, []);
+  }, [sync]);
 
   const tel = phone ? phone.replace(/[^\d+]/g, "") : "";
   const newTab = " (opens in a new tab)";

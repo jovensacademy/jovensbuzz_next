@@ -86,7 +86,8 @@ describe("migrated homepage sections", () => {
   it("footer shows quick links, only configured social links and the privacy link", () => {
     render(<Footer content={{ ...DEFAULT_CONTENT, social_dribbble: "", social_behance: "https://www.behance.net/jovensbuzz" }} />);
     const quick = screen.getByRole("navigation", { name: "Quick Links" });
-    expect(within(quick).getAllByRole("link").map((a) => a.textContent)).toEqual(["Home", "About Us", "How We Work"]);
+    expect(within(quick).getAllByRole("link").map((a) => a.textContent)).toEqual(["Home", "About Us", "How We Work", "Contact Us"]);
+    expect(within(quick).getByRole("link", { name: "Contact Us" })).toHaveAttribute("href", "/contact");
     const service = screen.getByRole("navigation", { name: "Services" });
     const serviceLinks = within(service).getAllByRole("link");
     expect(serviceLinks.map((a) => a.textContent)).toEqual([

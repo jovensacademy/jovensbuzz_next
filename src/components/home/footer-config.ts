@@ -18,6 +18,7 @@ export const FOOTER_QUICK_LINKS = {
     { label: "Home", href: "/", page: "home" },
     { label: "About Us", href: "/about", page: "about" },
     { label: "How We Work", href: "/how-we-work", page: "how-we-work" },
+    { label: "Contact Us", href: "/contact", page: "contact" },
   ] satisfies FooterLink[],
 } as const;
 

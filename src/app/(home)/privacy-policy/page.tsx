@@ -42,7 +42,7 @@ export default async function PrivacyPolicyPage() {
 
             <h2>1. Who We Are</h2>
             <p>
-              “Jovens Buzz,” “we,” “us” and “our” refer to Jovens Buzz, a business operating in the Dallas–Fort Worth area of Texas,
+              “Jovens Buzz,” “we,” “us” and “our” refer to Jovens Buzz llc, a business operating in the Dallas–Fort Worth area of Texas,
               United States. We provide services such as social media marketing, content creation, short-form video and reels, creative
               marketing design, brand identity and website development.
             </p>
@@ -255,7 +255,7 @@ export default async function PrivacyPolicyPage() {
             <p>For questions about this Privacy Policy or to submit a privacy request, contact:</p>
             <ul className={styles.details}>
               <li>
-                <strong>Jovens Buzz</strong>
+                <strong>Jovens Buzz Llc</strong>
               </li>
               <li>
                 <strong>Email:</strong> <Mail to="hello@jovensbuzz.com" />
