@@ -1,0 +1,90 @@
+/* Privacy Policy: the dark band carries the shared (white) inner-page header, as the About hero does;
+   below it, the same legal-article layout the page had before. */
+.hero {
+  position: relative;
+  padding: max(140px, calc(205 * var(--u) * 4 / 3)) 0 max(56px, calc(80 * var(--u) * 4 / 3));
+  background: #000 url(/assets/images/top-section-background.webp) center / cover no-repeat;
+  color: #fff;
+  text-align: center;
+}
+.label {
+  display: inline-block;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-sora), "Sora", sans-serif;
+  font-weight: 500;
+  font-size: max(16px, calc(19.8 * var(--u) * 4 / 3));
+  letter-spacing: -0.03em;
+}
+.title {
+  margin: 14px 0 0;
+  font-weight: 700;
+  font-size: clamp(32px, 4.4vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: #fff;
+}
+.updated {
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9375rem;
+}
+
+.page {
+  padding: clamp(48px, 7vw, 88px) 16px;
+  background: #fff;
+}
+.article {
+  max-width: 760px;
+  margin-inline: auto;
+  color: #374151;
+  font-size: 1rem;
+}
+.article h2 {
+  margin: 40px 0 12px;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #0b1730;
+}
+.article h3 {
+  margin: 24px 0 8px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #0b1730;
+}
+.article p,
+.article li {
+  line-height: 1.75;
+}
+.article p {
+  margin: 0;
+}
+.article p + p {
+  margin-top: 12px;
+}
+.article ul {
+  padding-left: 22px;
+  margin: 12px 0;
+}
+.article li + li {
+  margin-top: 6px;
+}
+.article strong {
+  color: #0b1730;
+}
+.article a {
+  color: #c2560e;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.article a:focus-visible {
+  outline: 2px solid #f4761f;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.details {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.details li + li {
+  margin-top: 4px;
+}

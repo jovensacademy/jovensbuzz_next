@@ -1,0 +1,686 @@
+/* Copied from jovens-buzz-subpages/css/about.css (the approved inner-page design). Only changes: url()
+   paths point at /assets/... in public/, and font families use the self-hosted next/font variables. */
+/* =========================================================================
+   Jovens Buzz – About Us page (about.html)
+   Built from Figma frame 97:450 (1440px artboard).
+
+   Loaded after css/style.css, which supplies the shared header, pill button
+   (.buzz-cta-btn), FAQ, CTA band, contact form, AOS/Motion helpers and the
+   --u unit (1 px of the 1920px homepage artboard).
+   --a is 1 px of the 1440px About artboard: --a = --u × 4/3, so the About
+   sections scale exactly like the homepage (same container padding, same
+   breakpoints). Every class is scoped to its own section block.
+   ========================================================================= */
+
+.about-hero-section-main,
+.about-intro-section-main,
+.about-values-section-main,
+.about-founder-section-main,
+.about-team-section-main,
+.cta-section-main__title--wide {
+  --a: calc(var(--u) * 4 / 3);
+}
+
+.about-hero-section-main__container,
+.about-values-section-main__container,
+.about-founder-section-main__container {
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: max(16px, calc(80 * var(--a)));
+}
+.about-intro-section-main__container,
+.about-team-section-main__container {
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: max(16px, calc(140 * var(--a)));
+}
+
+:where(.about-hero-section-main, .about-intro-section-main, .about-values-section-main,
+       .about-founder-section-main, .about-team-section-main) :is(h1, h2, h3, p) { margin: 0; }
+
+/* =========================================================================
+   ABOUT HERO
+   ========================================================================= */
+.about-hero-section-main {
+  /* Figma 119:13508 – same hero language as the Services page: black, faint
+     orange grid, orange glow rising from the bottom, centred label + 70px
+     two-line heading with a hand-drawn white underline. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: max(460px, calc(643 * var(--a)));
+  padding: max(150px, calc(205 * var(--a))) 0 max(80px, calc(120 * var(--a)));
+  overflow: hidden;
+  /* background: #000; */
+  background-image: url(/assets/images/top-section-background.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+  /* isolation: isolate; */
+}
+.about-hero-section-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(244, 118, 31, .09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 118, 31, .09) 1px, transparent 1px);
+  background-size: calc(120 * var(--a)) calc(120 * var(--a));
+  background-position: center calc(40 * var(--a));
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 45%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 70% at 50% 45%, #000 15%, transparent 75%);
+  pointer-events: none;
+}
+.about-hero-section-main__glow {
+  position: absolute;
+  left: 50%;
+  top: calc(499 * var(--a));
+  z-index: -1;
+  width: calc(792 * var(--a));
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(244, 118, 31, .37);
+  filter: blur(calc(232 * var(--a)));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.about-hero-section-main__container { position: relative; width: 100%; }
+.about-hero-section-main__label {
+  display: inline-block;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-sora), "Sora", sans-serif;
+  font-weight: 500;
+  font-size: max(16px, calc(19.8 * var(--a)));
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.about-hero-section-main__title {
+  margin: max(14px, calc(18 * var(--a))) auto 0;
+  font-weight: 700;
+  font-size: max(30px, calc(70 * var(--a)));
+  line-height: .99;
+  letter-spacing: -0.05em;
+  color: #fff;
+}
+.about-hero-section-main__accent { display: block; color: #f4761f; }
+/* Hand-drawn white underline under "Businesses Choose Us" (inline SVG
+   background, so it follows the words even when they wrap on phones) */
+.about-hero-section-main__underline {
+  padding-bottom: .26em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 18' preserveAspectRatio='none'%3E%3Cfilter id='r' x='-5%' y='-60%' width='110%' height='220%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .25' numOctaves='2' seed='4'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='3.2'/%3E%3C/filter%3E%3Cpath d='M4 10.5C80 7 175 6 268 8c48 1 90 2.4 128 3.8' fill='none' stroke='white' stroke-width='6.5' stroke-linecap='round' filter='url(%23r)'/%3E%3C/svg%3E") left bottom / 100% .24em no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* Phones: keep "Businesses Choose Us" on one line so the underline stays a
+   single clean stroke; the heading scales with the viewport to fit. */
+@media (max-width: 575.98px) {
+  .about-hero-section-main__title { font-size: clamp(24px, 8.3vw, 34px); }
+  .about-hero-section-main__underline { white-space: nowrap; }
+}
+/* Underline reveal: draws from left to right after the heading fades up */
+@media (prefers-reduced-motion: no-preference) {
+  .about-hero-section-main__title[data-aos] .about-hero-section-main__underline {
+    background-size: 0% .24em;
+    transition: background-size 1s cubic-bezier(.65, 0, .35, 1) .55s;
+  }
+  .about-hero-section-main__title[data-aos].aos-animate .about-hero-section-main__underline { background-size: 100% .24em; }
+}
+
+/* =========================================================================
+   INTRO – image + copy
+   ========================================================================= */
+.about-intro-section-main {
+  padding: max(56px, calc(80 * var(--a))) 0 max(56px, calc(87 * var(--a)));
+  background: #fff;
+}
+.about-intro-section-main__row {
+  --bs-gutter-x: max(24px, calc(56 * var(--a)));
+  --bs-gutter-y: 36px;
+}
+.about-intro-section-main__image {
+  display: block;
+  width: calc(601 * var(--a));
+  height: auto;
+  aspect-ratio: 601 / 611;
+  object-fit: cover;
+  border-radius: max(12px, calc(16 * var(--a)));
+  transition: transform .6s cubic-bezier(.16, 1, .3, 1), box-shadow .6s ease;
+}
+.about-intro-section-main__media:hover .about-intro-section-main__image {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px -28px rgba(24, 34, 38, .45);
+}
+.about-intro-section-main__title {
+  max-width: max(300px, calc(520 * var(--a)));
+  font-weight: 700;
+  font-size: max(32px, calc(55 * var(--a)));
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: #182226;
+}
+.about-intro-section-main__title-accent { color: #f88d00; }
+.about-intro-section-main__description {
+  max-width: max(300px, calc(507 * var(--a)));
+  margin-top: max(18px, calc(24 * var(--a)));
+  font-size: max(16px, calc(18 * var(--a)));
+  line-height: 1.5;
+  color: #656c7b;
+}
+.about-intro-section-main__button { margin-top: max(32px, calc(56 * var(--a))); }
+
+/* =========================================================================
+   OUR VALUES
+   ========================================================================= */
+.about-values-section-main {
+  position: relative;
+  padding: max(64px, calc(86 * var(--a))) 0 max(64px, calc(96 * var(--a)));
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  isolation: isolate;
+}
+.about-values-section-main__glow {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -1;
+  height: 72%;
+  pointer-events: none;
+}
+.about-values-section-main__arcs { display: block; width: 100%; height: 100%; }
+.about-values-section-main__header { max-width: 640px; margin: 0 auto; text-align: center; }
+.about-values-section-main__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-sora), "Sora", sans-serif;
+  font-size: max(16px, calc(20 * var(--a)));
+  line-height: 1.4;
+}
+.about-values-section-main__dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+.about-values-section-main__title {
+  margin-top: max(4px, calc(6 * var(--a)));
+  font-weight: 700;
+  font-size: max(32px, calc(55 * var(--a)));
+  line-height: 1.09;
+  letter-spacing: -0.036em;
+}
+.about-values-section-main__description {
+  margin-top: max(12px, calc(18 * var(--a)));
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-sora), "Sora", sans-serif;
+  font-weight: 500;
+  font-size: max(16px, calc(20 * var(--a)));
+  line-height: 1.4;
+  color: #d6d4d4;
+}
+.about-values-section-main__grid {
+  --bs-gutter-x: max(16px, calc(24 * var(--a)));
+  --bs-gutter-y: max(16px, calc(24 * var(--a)));
+  margin-top: calc(max(36px, calc(55 * var(--a))) - var(--bs-gutter-y));
+}
+.about-values-section-main__card {
+  display: flex;
+  flex-direction: column;
+  gap: max(16px, calc(24 * var(--a)));
+  height: 100%;
+  padding: max(24px, calc(36 * var(--a)));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: max(18px, calc(24 * var(--a)));
+  background: rgba(18, 18, 19, .5);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  transition: border-color .4s ease, background-color .4s ease;
+}
+.about-values-section-main__card:hover { border-color: rgba(248, 141, 0, .45); background: rgba(28, 22, 18, .6); }
+.about-values-section-main__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: max(60px, calc(80 * var(--a)));
+  height: max(60px, calc(80 * var(--a)));
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 50%;
+  color: #ff9a2e;
+  transition: background-color .4s ease, color .4s ease, border-color .4s ease;
+}
+.about-values-section-main__icon svg { width: max(28px, calc(36 * var(--a))); height: auto; }
+.about-values-section-main__card:hover .about-values-section-main__icon { background: #f88d00; border-color: #f88d00; color: #fff; }
+.about-values-section-main__card-title {
+  font-weight: 600;
+  font-size: max(22px, calc(32 * var(--a)));
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+.about-values-section-main__card-text {
+  max-width: max(260px, calc(502 * var(--a)));
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-sora), "Sora", sans-serif;
+  font-size: max(15px, calc(18 * var(--a)));
+  line-height: 1.56;
+  color: #d6d4d4;
+}
+
+/* =========================================================================
+   WE MAKE BRANDS IMPOSSIBLE TO IGNORE  (Figma 110:689 / reference screenshot)
+   Measured on the 1440 artboard (section 783px tall):
+     outer circle  ⌀1004, centre (166, 699)
+     middle circle ⌀830,  centre (121, 703)
+     inner circle  ⌀583,  centre (110, 700)
+     icon boxes 80px at (72,256) (388,236) (269,451) (484,635)
+     logo circle ⌀160 at (-32,664) – it overlaps the next section a little.
+   The visual box is x 0–720 / y 120–783 of the section, so everything inside
+   it is placed in % of that box and scales with it.
+   ========================================================================= */
+.about-brand-section-main {
+  --a: calc(var(--u) * 4 / 3);
+  position: relative;
+  z-index: 2;                       /* logo circle sits over the next section's top edge */
+  min-height: calc(783 * var(--a));
+  padding: max(64px, calc(119 * var(--a))) 0 max(56px, calc(73 * var(--a)));
+  background: linear-gradient(245deg, #fffdfb 6.9%, #fffaf3 92.8%);
+}
+.about-brand-section-main__container {
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: max(16px, calc(80 * var(--a)));
+}
+.about-brand-section-main__row { --bs-gutter-x: max(24px, calc(48 * var(--a))); --bs-gutter-y: 0; }
+
+/* ---- Visual box ---- */
+.about-brand-section-main__visual {
+  position: relative;
+  aspect-ratio: 720 / 663;
+}
+/* Clipping wrapper: the circles are cut by the section's left and bottom edges */
+.about-brand-section-main__circles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* ---- Circle rotation ----------------------------------------------------
+   Every circle element rotates 360° continuously (linear, infinite), with
+   alternate layers turning in opposite directions.
+   The circles are nested and slightly off-centre, so a plain rotation of a
+   parent would swing its child around. Each child therefore first undoes its
+   parent's rotation about the parent's centre (the translate pair = parent
+   centre measured from the child centre, in % of the child) and then applies
+   its own rotation about its own centre. Net result: each circle spins in
+   place and every position from the design stays exactly where it is.
+   The angles are animated, typed custom properties (@property). Positioning
+   uses the separate `translate` property, so it is never overwritten. */
+@property --brand-angle-outer  { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@property --brand-angle-middle { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@property --brand-angle-inner  { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@property --brand-angle-center { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+@keyframes about-brand-spin-outer  { to { --brand-angle-outer: 360deg; } }
+@keyframes about-brand-spin-middle { to { --brand-angle-middle: -360deg; } }
+@keyframes about-brand-spin-inner  { to { --brand-angle-inner: 360deg; } }
+@keyframes about-brand-spin-center { to { --brand-angle-center: -360deg; } }
+
+.about-brand-section-main__circle {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  overflow: hidden;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.about-brand-section-main__circle > .about-brand-section-main__circle { z-index: 1; }
+
+/* Each layer = its original peach/cream fill + a very soft conic highlight
+   that makes the rotation visible on a perfectly round shape. */
+.about-brand-section-main__circle--outer {
+  left: 23.06%;               /* 166 / 720 */
+  top: 87.33%;                /* (699 - 120) / 663 */
+  width: 139.44%;             /* 1004 / 720 */
+  background:
+    conic-gradient(from 20deg, rgba(255, 255, 255, 0) 0deg, rgba(255, 255, 255, .55) 55deg, rgba(255, 255, 255, 0) 120deg, rgba(248, 141, 0, .08) 205deg, rgba(255, 255, 255, 0) 280deg),
+    radial-gradient(circle closest-side, #f4dfcd 80%, #fde8d8 100%);
+  transform: rotate(var(--brand-angle-outer));
+  animation: about-brand-spin-outer 45s linear infinite;
+}
+.about-brand-section-main__circle--middle {
+  left: 45.52%;               /* centre 45px left of the outer centre */
+  top: 50.4%;
+  width: 82.67%;              /* 830 / 1004 */
+  background:
+    conic-gradient(from 160deg, rgba(255, 255, 255, 0) 0deg, rgba(255, 255, 255, .6) 60deg, rgba(255, 255, 255, 0) 130deg, rgba(244, 118, 31, .07) 220deg, rgba(255, 255, 255, 0) 290deg),
+    radial-gradient(circle closest-side, #f7e4d6 68%, #fdebde 100%);
+  transform: translate(5.42%, -0.48%) rotate(calc(-1 * var(--brand-angle-outer))) translate(-5.42%, 0.48%) rotate(var(--brand-angle-middle));
+  animation: about-brand-spin-middle 35s linear infinite;
+}
+.about-brand-section-main__circle--inner {
+  left: 48.67%;
+  top: 49.64%;
+  width: 70.24%;              /* 583 / 830 */
+  background:
+    conic-gradient(from 90deg, rgba(255, 228, 206, 0) 0deg, rgba(255, 222, 196, .45) 70deg, rgba(255, 228, 206, 0) 150deg),
+    #fef7f3;
+  transform: translate(1.89%, 0.51%) rotate(calc(-1 * var(--brand-angle-middle))) translate(-1.89%, -0.51%) rotate(var(--brand-angle-inner));
+  animation: about-brand-spin-inner 40s linear infinite;
+}
+.about-brand-section-main__circle--center {
+  left: 50%;
+  top: 50%;
+  width: 56%;
+  background:
+    conic-gradient(from 250deg, rgba(255, 255, 255, 0) 0deg, rgba(255, 255, 255, .7) 60deg, rgba(255, 255, 255, 0) 140deg),
+    radial-gradient(circle closest-side, #fff4ec, rgba(254, 247, 243, 0));
+  transform: rotate(calc(var(--brand-angle-center) - var(--brand-angle-inner)));   /* concentric with the inner circle */
+  animation: about-brand-spin-center 30s linear infinite;
+}
+
+/* ---- Icon boxes ---- */
+.about-brand-section-main__icon-box {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11.11%;              /* 80 / 720 */
+  aspect-ratio: 1;
+  border-radius: 15%;         /* 12 / 80 */
+  background: #fafafa;
+  box-shadow: 0 calc(14 * var(--a)) calc(42 * var(--a)) rgba(120, 120, 120, .3);
+  animation: about-brand-float 6s ease-in-out infinite;
+}
+.about-brand-section-main__icon { width: 60%; height: auto; }
+.about-brand-section-main__icon-box--eye   { left: 10%;    top: 20.51%; background: #fff; }
+.about-brand-section-main__icon-box--chart { left: 53.89%; top: 17.5%;  animation-duration: 7.5s; animation-delay: -2s; }
+.about-brand-section-main__icon-box--bulb  { left: 37.36%; top: 49.92%; animation-duration: 5.5s; animation-delay: -3.5s; }
+.about-brand-section-main__icon-box--team  { left: 67.22%; top: 77.68%; animation-duration: 8s;   animation-delay: -1s; }
+@keyframes about-brand-float { 50% { transform: translateY(-8%); } }
+
+/* ---- Logo ---- */
+.about-brand-section-main__logo {
+  position: absolute;
+  z-index: 2;
+  left: -4.44%;               /* -32 / 720 */
+  top: 82.05%;                /* (664 - 120) / 663 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22.22%;              /* 160 / 720 */
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fb8a00 10%, #e96203 90%);
+}
+/* Existing brand-mark asset shown white on the orange circle */
+.about-brand-section-main__logo-mark { width: 42%; height: auto; filter: brightness(0) invert(1); }
+
+/* ---- Content ---- */
+.about-brand-section-main__content { position: relative; z-index: 3; text-align: right; }
+:where(.about-brand-section-main) :is(h2, p) { margin: 0; }
+.about-brand-section-main__title {
+  max-width: max(300px, calc(577 * var(--a)));
+  margin-left: auto;
+  font-weight: 700;
+  font-size: max(32px, calc(55 * var(--a)));
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: #182226;
+}
+.about-brand-section-main__highlight { color: #f4761f; }
+.about-brand-section-main__description {
+  max-width: max(300px, calc(616 * var(--a)));
+  margin: max(18px, calc(28 * var(--a))) 0 0 auto;
+  font-size: max(16px, calc(18 * var(--a)));
+  line-height: 1.5;
+  color: #656c7b;
+}
+/* Larger pill from the design (28.3px label, 56.6px icon at 1440) */
+.about-brand-section-main__button {
+  gap: max(12px, calc(17 * var(--a)));
+  margin-top: max(32px, calc(283 * var(--a)));
+  padding: max(6px, calc(8.49 * var(--a))) max(6px, calc(8.49 * var(--a))) max(6px, calc(8.49 * var(--a))) max(18px, calc(22.64 * var(--a)));
+}
+.about-brand-section-main__button .buzz-cta-btn__label { font-size: max(18px, calc(28.3 * var(--a))); letter-spacing: -0.06em; }
+.about-brand-section-main__button .buzz-cta-btn__icon { width: max(40px, calc(56.6 * var(--a))); height: max(40px, calc(56.6 * var(--a))); overflow: hidden; }
+.about-brand-section-main__button .buzz-cta-btn__icon img { width: max(24px, calc(34 * var(--a))); transition: transform .35s cubic-bezier(.16, 1, .3, 1); }
+.about-brand-section-main__button:hover .buzz-cta-btn__icon img,
+.about-brand-section-main__button:focus-visible .buzz-cta-btn__icon img { transform: translate(3px, -3px); }
+
+/* Tablet & desktop: the visual box is anchored to the section's bottom-left like Figma */
+@media (min-width: 768px) {
+  .about-brand-section-main__visual-col { position: static; }
+  .about-brand-section-main__visual {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: min(50%, calc(720 * var(--a)));
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .about-brand-section-main { min-height: 560px; }
+  .about-brand-section-main__button { margin-top: 40px; }
+  .about-brand-section-main__visual { width: 50%; }
+}
+/* Mobile: stacked – content first, the illustration below at full width */
+@media (max-width: 767.98px) {
+  .about-brand-section-main { min-height: 0; padding-bottom: 0; }
+  .about-brand-section-main__content { text-align: left; }
+  .about-brand-section-main__title,
+  .about-brand-section-main__description { margin-left: 0; }
+  .about-brand-section-main__visual {
+    width: calc(100% + 2 * max(16px, calc(80 * var(--a))));
+    max-width: 600px;
+    margin: 32px 0 0 calc(-1 * max(16px, calc(80 * var(--a))));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-brand-section-main__circle,
+  .about-brand-section-main__icon-box { animation: none; }
+  .about-brand-section-main__button .buzz-cta-btn__icon img { transition: none; }
+}
+
+/* =========================================================================
+   FOUNDER
+   ========================================================================= */
+.about-founder-section-main {
+  position: relative;
+  min-height: calc(815 * var(--a));
+  overflow: hidden;
+  background: linear-gradient(239deg, #fff 2.1%, #fff8ef 109.7%);
+  isolation: isolate;
+}
+.about-founder-section-main__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(244, 118, 31, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 118, 31, .07) 1px, transparent 1px);
+  background-size: calc(64 * var(--a)) calc(64 * var(--a));
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 35% 45%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 75% 70% at 35% 45%, #000 20%, transparent 80%);
+  pointer-events: none;
+}
+.about-founder-section-main__row { --bs-gutter-x: max(24px, calc(48 * var(--a))); --bs-gutter-y: 40px; }
+.about-founder-section-main__content { padding-block: max(64px, calc(97 * var(--a))) max(40px, calc(108 * var(--a))); position: relative; z-index: 2; }
+.about-founder-section-main__title {
+  max-width: max(300px, calc(494 * var(--a)));
+  font-weight: 700;
+  font-size: max(32px, calc(55 * var(--a)));
+  line-height: 1;
+  letter-spacing: -0.036em;
+  color: #000;
+}
+.about-founder-section-main__title-accent { color: #f4761f; }
+.about-founder-section-main__description {
+  max-width: max(300px, calc(525 * var(--a)));
+  font-size: max(16px, calc(20 * var(--a)));
+  line-height: 1.5;
+  color: #000;
+}
+.about-founder-section-main__title + .about-founder-section-main__description { margin-top: max(20px, calc(34 * var(--a))); }
+.about-founder-section-main__description + .about-founder-section-main__description { margin-top: max(18px, calc(48 * var(--a))); }
+.about-founder-section-main__signature {
+  display: flex;
+  flex-direction: column;
+  margin-top: max(28px, calc(64 * var(--a)));
+  font-size: max(20px, calc(30 * var(--a)));
+  line-height: 1.34;
+  letter-spacing: -0.04em;
+}
+.about-founder-section-main__name { font-weight: 600; color: #000; }
+.about-founder-section-main__role { font-weight: 300; color: #6e6e6e; }
+.about-founder-section-main__media { position: relative; }
+.about-founder-section-main__frame { position: relative; width: 100%; max-width: 520px; margin: 0 auto; aspect-ratio: 736 / 783; }
+.about-founder-section-main__card {
+  position: absolute;
+  left: 66%;
+  top: 68.3%;
+  width: 105.6%;
+  height: 110.9%;
+  border-radius: max(18px, calc(24 * var(--a)));
+  background: linear-gradient(180deg, #ffedd7, rgba(255, 246, 236, .5));
+  transform: translate(-50%, -50%) rotate(-19.35deg);
+}
+.about-founder-section-main__image {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+}
+@media (min-width: 992px) {
+  .about-founder-section-main__media { align-self: stretch; }
+  .about-founder-section-main__frame {
+    position: absolute;
+    left: calc(-52 * var(--a));
+    bottom: 0;
+    width: calc(736 * var(--a));
+    max-width: none;
+    margin: 0;
+  }
+}
+@media (max-width: 991.98px) {
+  .about-founder-section-main__content { padding-bottom: 0; }
+  .about-founder-section-main__frame { margin-top: 24px; }
+}
+
+/* =========================================================================
+   CREATIVE TEAM
+   ========================================================================= */
+.about-team-section-main {
+  padding: max(64px, calc(80 * var(--a))) 0 max(56px, calc(79 * var(--a)));
+  background: #fff;
+}
+.about-team-section-main__header { --bs-gutter-y: 16px; }
+.about-team-section-main__title {
+  max-width: max(300px, calc(555 * var(--a)));
+  font-weight: 700;
+  font-size: max(32px, calc(55 * var(--a)));
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  color: #1e2238;
+}
+.about-team-section-main__title-accent { color: #f4761f; }
+.about-team-section-main__description {
+  max-width: max(300px, calc(416 * var(--a)));
+  margin-left: auto;
+  font-family: var(--font-jakarta), "Plus Jakarta Sans", var(--font-sora), "Sora", sans-serif;
+  font-weight: 500;
+  font-size: max(16px, calc(18 * var(--a)));
+  line-height: 1.5;
+  color: #000;
+}
+.about-team-section-main__grid {
+  --bs-gutter-x: max(16px, calc(31 * var(--a)));
+  --bs-gutter-y: max(32px, calc(57 * var(--a)));
+  margin-top: calc(max(36px, calc(63 * var(--a))) - var(--bs-gutter-y));
+  margin-bottom: 0;
+}
+.about-team-section-main__member { display: flex; flex-direction: column; gap: max(16px, calc(24 * var(--a))); }
+.about-team-section-main__photo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 365 / 408;
+  overflow: hidden;
+  border-radius: max(18px, calc(24 * var(--a)));
+  background: linear-gradient(180deg, #ffedd7, rgba(255, 246, 236, .5));
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1), box-shadow .5s ease;
+}
+.about-team-section-main__placeholder {
+  width: 49%;
+  height: auto;
+  margin-top: -15%;
+  opacity: .3;
+  transform: rotate(-10.99deg);
+  transition: transform .6s cubic-bezier(.16, 1, .3, 1), opacity .4s ease;
+}
+.about-team-section-main__member:hover .about-team-section-main__photo { transform: translateY(-6px); box-shadow: 0 26px 48px -30px rgba(244, 118, 31, .55); }
+.about-team-section-main__member:hover .about-team-section-main__placeholder { opacity: .45; transform: rotate(-3deg) scale(1.04); }
+.about-team-section-main__info { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.about-team-section-main__name {
+  font-weight: 600;
+  font-size: max(19px, calc(24 * var(--a)));
+  line-height: 1.2;
+  color: #1e2238;
+}
+.about-team-section-main__role {
+  margin-top: max(6px, calc(8 * var(--a)));
+  font-size: max(15px, calc(18 * var(--a)));
+  line-height: 1.2;
+  color: #656c7b;
+}
+.about-team-section-main__socials { display: flex; flex: none; gap: max(14px, calc(20 * var(--a))); margin: 0; }
+.about-team-section-main__social {
+  display: flex;
+  color: #656c7b;
+  transition: color .2s ease, transform .2s ease;
+}
+.about-team-section-main__social svg { width: max(20px, calc(24 * var(--a))); height: max(20px, calc(24 * var(--a))); }
+.about-team-section-main__social:hover,
+.about-team-section-main__social:focus-visible { color: #f4761f; transform: translateY(-2px); }
+.about-team-section-main__social:focus-visible { outline: 2px solid #f4761f; outline-offset: 3px; border-radius: 4px; }
+
+/* =========================================================================
+   CTA BAND – wider title used on the About page (shared component modifier)
+   ========================================================================= */
+.cta-section-main__title--wide {
+  max-width: max(280px, calc(613 * var(--a)));
+  font-weight: 700;
+  font-size: max(28px, calc(40 * var(--a)));
+  line-height: 1.2;
+  letter-spacing: -0.05em;
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+@media (min-width: 992px) {
+  .about-founder-section-main__row { align-items: flex-start; }
+}
+@media (max-width: 991.98px) {
+  .about-intro-section-main__image { width: 100%; max-width: 601px; margin-inline: auto; }
+  .about-founder-section-main { min-height: 0; }
+  .about-team-section-main__description { margin-left: 0; }
+}
+@media (max-width: 575.98px) {
+  .about-team-section-main__info { flex-direction: column; }
+}
+
+/* =========================================================================
+   Reduced motion
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .about-intro-section-main__image,
+  .about-values-section-main__card,
+  .about-values-section-main__icon,
+  .about-team-section-main__photo,
+  .about-team-section-main__placeholder,
+  .about-team-section-main__social { transition: none; }
+}
+
+/* CTA band on the About page: the swirl sits a little further right so the
+   two-line title never runs into it (shared component modifier). */
+@media (min-width: 768px) {
+  .cta-section-main__swirl--shifted { left: 7%; }
+}

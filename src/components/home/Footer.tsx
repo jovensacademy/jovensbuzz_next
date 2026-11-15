@@ -1,34 +1,18 @@
 /* eslint-disable @next/next/no-img-element -- original logo asset, shown at a fixed size */
 import Link from "next/link";
-import { SOCIAL_URLS } from "@/lib/content-defaults";
 import type { SiteContent } from "@/types/api";
 import styles from "./Footer.module.css";
-
-const QUICK_LINKS = [
-  { label: "Home", href: "/#home" },
-  { label: "About Us", href: "/#about" },
-  { label: "Services", href: "/#services" },
-  { label: "How We Work", href: "/#process" },
-];
-
-// Order follows the design. LinkedIn, Instagram and Facebook use the official URLs; the others are
-// shown only when a URL is stored in site content (social_* keys).
-const SOCIAL_LINKS: { label: string; key: string; href?: string }[] = [
-  { label: "LinkedIn", key: "social_linkedin", href: SOCIAL_URLS.social_linkedin },
-  { label: "Instagram", key: "social_instagram", href: SOCIAL_URLS.social_instagram },
-  { label: "Dribbble", key: "social_dribbble" },
-  { label: "Behance", key: "social_behance" },
-  { label: "Facebook", key: "social_facebook", href: SOCIAL_URLS.social_facebook },
-];
+import { FOOTER_QUICK_LINKS, FOOTER_SERVICE_LINKS, FOOTER_SOCIAL_LINKS, type FooterPage } from "./footer-config";
 
 /**
- * Site footer: copyright, agency description and logo on the left; Quick Links and Social Media
- * on the right; Privacy Policy bottom-right. Self-contained styles (CSS module) so it can be used
- * in any layout.
+ * Site footer: copyright, agency description and logo on the left; Quick Links, Services and Social
+ * Media columns on the right; Privacy Policy bottom-right. All links and headings
+ * come from the footer's own configuration (footer-config.ts), independent of the header navigation.
+ * Self-contained styles (CSS module) so it can be used in any layout.
  */
-export function Footer({ content }: { content: SiteContent }) {
+export function Footer({ content, current }: { content: SiteContent; current?: FooterPage }) {
   const year = new Date().getFullYear();
-  const socials = SOCIAL_LINKS.map((link) => ({ ...link, href: link.href ?? content[link.key]?.trim() })).filter(
+  const socials = FOOTER_SOCIAL_LINKS.links.map((link) => ({ ...link, href: link.href ?? content[link.key]?.trim() })).filter(
     (link) => link.href,
   );
 
@@ -46,12 +30,26 @@ export function Footer({ content }: { content: SiteContent }) {
         <div className={styles.columns}>
           <nav aria-labelledby="footerQuickLinks">
             <h2 id="footerQuickLinks" className={styles.heading}>
-              Quick Links
+              {FOOTER_QUICK_LINKS.heading}
             </h2>
             <ul className={styles.list}>
-              {QUICK_LINKS.map((link) => (
+              {FOOTER_QUICK_LINKS.links.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href}>{link.label}</a>
+                  <Link href={link.href} aria-current={link.page === current ? "page" : undefined}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <nav aria-labelledby="footerServices">
+            <h2 id="footerServices" className={styles.heading}>
+              {FOOTER_SERVICE_LINKS.heading}
+            </h2>
+            <ul className={styles.list}>
+              {FOOTER_SERVICE_LINKS.links.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href}>{link.label}</Link>
                 </li>
               ))}
             </ul>
@@ -59,7 +57,7 @@ export function Footer({ content }: { content: SiteContent }) {
           {socials.length > 0 && (
             <nav aria-labelledby="footerSocialMedia">
               <h2 id="footerSocialMedia" className={styles.heading}>
-                Social Media
+                {FOOTER_SOCIAL_LINKS.heading}
               </h2>
               <ul className={styles.list}>
                 {socials.map((link) => (
@@ -77,12 +75,13 @@ export function Footer({ content }: { content: SiteContent }) {
       </div>
 
       <div className={styles.bottom}>
-        <Link href="/#home" className={styles.logo} aria-label="Jovens Buzz – Get Seen. Get Growing. Back to top">
+        <Link href="/" className={styles.logo} aria-label="Jovens Buzz – Get Seen. Get Growing. Back to top">
           <img src="/assets/images/footer-logo.svg" alt="Jovens Buzz – Get Seen. Get Growing" width={146} height={55} loading="lazy" />
         </Link>
-        {/* <a href="/privacy-policy" className={styles.privacy}>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- footer markup kept as-is; flagged only since the top-level /[slug] service route exists */}
+        <a href="/privacy-policy" className={styles.privacy}>
           Privacy Policy
-        </a> */}
+        </a>
       </div>
     </footer>
   );

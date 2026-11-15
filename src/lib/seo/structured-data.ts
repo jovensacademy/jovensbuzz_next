@@ -44,7 +44,7 @@ export function websiteJsonLd(): JsonLd {
   };
 }
 
-/** For future dedicated pages (e.g. /services/[slug]). */
+/** Breadcrumb trail for inner pages. */
 export function breadcrumbJsonLd(items: Array<{ name: string; path: string }>): JsonLd {
   return {
     "@context": "https://schema.org",

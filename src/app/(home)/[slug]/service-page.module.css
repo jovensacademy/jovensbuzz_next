@@ -1,0 +1,24 @@
+/* Individual service pages. Everything else comes from the /services sections (styles/original/pages.css). */
+
+/* The service photos are portrait; crop them to the /services visual's proportions so the section keeps its height */
+.page :global(.services-strategy-section-main__image) {
+  /* aspect-ratio: 577 / 550; */
+  object-fit: cover;
+  border-radius: max(18px, calc(28 * var(--u)));
+}
+
+/*
+ * Hero heading: two balanced lines on desktop for every service (the longest, Website Development,
+ * needs ~1050px at 1440px). Widths scale with --a like the rest of the hero, so the line breaks hold
+ * at every desktop width; text-wrap: balance picks the break per heading. Smaller screens wrap freely.
+ */
+.page :global(.services-hero-section-main__title) {
+  max-width: max(300px, calc(1100 * var(--a)));
+  text-wrap: balance;
+}
+@media (max-width: 767.98px) {
+  /* Phones: use the full content width rather than the 300px floor */
+  .page :global(.services-hero-section-main__title) {
+    max-width: 100%;
+  }
+}

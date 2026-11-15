@@ -60,7 +60,7 @@ export function SiteFooter({ content, services }: { content: SiteContent; servic
           <ul>
             {services.slice(0, 8).map((service) => (
               <li key={service.slug}>
-                <Link href="/#services">{service.title}</Link>
+                <Link href="/services">{service.title}</Link>
               </li>
             ))}
           </ul>

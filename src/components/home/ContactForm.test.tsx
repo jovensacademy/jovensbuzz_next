@@ -328,6 +328,21 @@ describe("homepage ContactForm", () => {
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
   });
 
+  it("sends one enquiry when submit fires twice before React re-renders (fast double click)", async () => {
+    const user = userEvent.setup();
+    const fetchSpy = mockApi({ enquiry: () => json(201, { success: true, data: { publicReference: "JB-2026-DBL001", submittedAt: "", duplicate: false } }) });
+    renderForm();
+    await fillValid(user);
+    const button = screen.getByRole("button", { name: /discover your buzz/i });
+    act(() => {
+      // Two native clicks in one tick: the second one runs before `sending` state is re-rendered
+      button.click();
+      button.click();
+    });
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+    expect(fetchSpy.mock.calls.filter(([url]) => String(url).endsWith("/enquiries"))).toHaveLength(1);
+  });
+
   it("never shows the success modal when the backend fails", async () => {
     const user = userEvent.setup();
     mockApi({ enquiry: () => json(500, { success: false, message: "boom" }) });

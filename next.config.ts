@@ -37,6 +37,18 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  // The six service pages moved from /services/<slug> to /<slug>: 301 the old URLs (same slugs as
+  // src/lib/service-pages.ts). Any other /services/… path stays a 404.
+  async redirects() {
+    return [
+      {
+        source:
+          "/services/:slug(social-media-marketing|content-creation|short-form-video-reels|creative-marketing-design|brand-identity-branding|website-development)",
+        destination: "/:slug",
+        statusCode: 301,
+      },
+    ];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

@@ -75,8 +75,11 @@ export function HomeInteractions() {
     // Lets :active styles work on iOS for touch feedback on non-link items
     on(document, "touchstart", () => {}, { passive: true });
 
-    /* Header: highlight the nav link for the section in view. */
-    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".site-header-main__link"));
+    /* Header: highlight the nav link for the section in view (in-page "#section" links only; the
+       links to other pages are marked active by the server-rendered Header). */
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".site-header-main__link")).filter((link) =>
+      link.getAttribute("href")?.startsWith("#"),
+    );
     const sections = links
       .map((link) => document.querySelector(link.getAttribute("href") ?? ""))
       .filter((el): el is Element => Boolean(el));
@@ -142,14 +145,9 @@ function setupServicesAccordion(on: On): Cleanup {
 
   const activate = (panel: HTMLElement) => {
     if (panel.classList.contains(ACTIVE)) return;
-    panels.forEach((p) => {
-      const isOn = p === panel;
-      p.classList.toggle(ACTIVE, isOn);
-      p.querySelector(".services-section-main__trigger")?.setAttribute("aria-expanded", isOn ? "true" : "false");
-      const arrow = p.querySelector(".services-section-main__arrow");
-      if (isOn) arrow?.removeAttribute("tabindex");
-      else arrow?.setAttribute("tabindex", "-1");
-    });
+    // Each card's trigger is its link to the service page (the arrow is a visual duplicate kept out of
+    // the tab order), so only the open panel changes here
+    panels.forEach((p) => p.classList.toggle(ACTIVE, p === panel));
   };
 
   panels.forEach((panel) => {

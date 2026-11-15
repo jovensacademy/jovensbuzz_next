@@ -16,7 +16,7 @@ describe("MobileNav", () => {
     expect(screen.getByRole("button", { name: "Close menu" })).toHaveAttribute("aria-expanded", "true");
     const nav = screen.getByRole("navigation", { name: "Mobile" });
     expect(nav).toBeVisible();
-    expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/#services");
+    expect(screen.getByRole("link", { name: "Services" })).toHaveAttribute("href", "/services");
     expect(screen.getByRole("link", { name: "Home" })).toHaveFocus();
   });
 

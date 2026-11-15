@@ -1,20 +1,28 @@
 /* eslint-disable @next/next/no-img-element -- original markup preserved for pixel parity */
+import Link from "next/link";
 import { CtaButton } from "./CtaButton";
+import { ServicesNavItem } from "./ServicesNavItem";
+
+export type SitePage = "home" | "about" | "services" | "how-we-work" | "contact" | "privacy";
 
 export const HEADER_LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "About Us" },
-  { href: "#services", label: "Services" },
-  { href: "#process", label: "How We Work" },
-] as const;
+  { href: "/", label: "Home", page: "home" },
+  { href: "/about", label: "About Us", page: "about" },
+  { href: "/services", label: "Services", page: "services" },
+  { href: "/how-we-work", label: "How We Work", page: "how-we-work" },
+] as const satisfies readonly { href: string; label: string; page: SitePage }[];
 
-/** Bootstrap navbar from the original page; collapse is driven by Bootstrap's data API. */
-export function Header() {
+/**
+ * Bootstrap navbar from the original page; collapse is driven by Bootstrap's data API. Shared by the
+ * homepage and the inner pages: `current` marks the active link and inner pages get the thin warm
+ * rule under the bar (`site-header-main--bordered`) from their design.
+ */
+export function Header({ current = "home", currentService }: { current?: SitePage; currentService?: string }) {
   return (
-    <header className="site-header-main">
+    <header className={`site-header-main${current === "home" ? "" : " site-header-main--bordered"}`}>
       <nav className="navbar navbar-expand-lg site-header-main__navbar" aria-label="Main navigation">
         <div className="container-fluid site-header-main__inner">
-          <a className="site-header-main__brand" href="#home" aria-label="Jovens Buzz home">
+          <Link className="site-header-main__brand" href="/" aria-label="Jovens Buzz home">
             <img
               src="/assets/images/logo-jovens-buzz.png"
               alt="Buzz – Get Seen. Get Growing"
@@ -23,7 +31,7 @@ export function Header() {
               className="site-header-main__logo"
               fetchPriority="high"
             />
-          </a>
+          </Link>
 
           <button
             className="site-header-main__toggler navbar-toggler"
@@ -39,19 +47,19 @@ export function Header() {
 
           <div className="collapse navbar-collapse site-header-main__collapse" id="siteHeaderMainMenu">
             <ul className="navbar-nav site-header-main__menu">
-              {HEADER_LINKS.map((link, index) => (
-                <li key={link.href} className="nav-item">
-                  <a
-                    className={`site-header-main__link${index === 0 ? " is-active" : ""}`}
-                    aria-current={index === 0 ? "page" : undefined}
-                    href={link.href}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {HEADER_LINKS.map((link) => {
+                const active = link.page === current;
+                if (link.page === "services") return <ServicesNavItem key={link.href} active={active} currentSlug={currentService} />;
+                return (
+                  <li key={link.href} className="nav-item">
+                    <Link className={`site-header-main__link${active ? " is-active" : ""}`} aria-current={active ? "page" : undefined} href={link.href}>
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
-            <CtaButton href="#contact" label="Contact Us" className="buzz-cta-btn--sm site-header-main__cta" />
+            <CtaButton href="/contact" label="Contact Us" className="buzz-cta-btn--sm site-header-main__cta" />
           </div>
         </div>
       </nav>

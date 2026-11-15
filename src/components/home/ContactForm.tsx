@@ -39,6 +39,8 @@ export function ContactForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>({ type: "", content: "" });
   const [sending, setSending] = useState(false);
+  // Synchronous guard: two clicks in the same tick both see `sending === false`, which sent the enquiry twice
+  const inFlight = useRef(false);
   const [services, setServices] = useState<ServicesState>({ status: "loading" });
   const [serviceId, setServiceId] = useState("");
   const [country, setCountry] = useState<CountryCode>(DEFAULT_PHONE_COUNTRY);
@@ -138,7 +140,7 @@ export function ContactForm({
   /* ---------------- submission ---------------- */
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (sending) return;
+    if (inFlight.current) return;
     const form = formRef.current!;
 
     const names = ["first_name", "last_name", "email", "phone", "service"];
@@ -173,6 +175,7 @@ export function ContactForm({
       website: String(data.get("website") ?? ""),
     });
 
+    inFlight.current = true;
     setSending(true);
     setStatus({ type: "", content: "Sending your message…" });
     const controller = new AbortController();
@@ -224,6 +227,7 @@ export function ContactForm({
       });
     } finally {
       clearTimeout(timer);
+      inFlight.current = false;
       setSending(false);
       if (statusRef.current?.textContent) statusRef.current.focus({ preventScroll: true });
     }

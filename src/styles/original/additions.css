@@ -393,3 +393,144 @@
     animation: none;
   }
 }
+
+/* ---------- Inner pages (About, Services, How We Work, Contact) ---------- */
+/* From jovens-buzz-subpages/css/style.css: the header has a thin warm rule under it (Figma: 126px tall) */
+.site-header-main--bordered .site-header-main__navbar {
+  padding-bottom: max(16px, calc(49.33 * var(--u)));
+  border-bottom: 1px solid rgba(244, 118, 31, .28);
+}
+
+/* ---------- Header: Services dropdown (six service pages) ---------- */
+/* "Services" is only a trigger (no page). Its aria-expanded state — set by hover on desktop, click/tap
+   or keyboard — is the single source for the menu (.is-open) and the arrow, so they never disagree. */
+.site-header-main__dropdown { position: relative; }
+.site-header-main__dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.site-header-main__dropdown-trigger[aria-expanded="true"] { color: #ff9e1d; }
+.site-header-main__dropdown-trigger:focus-visible { outline: 2px solid #ff9e1d; outline-offset: 4px; border-radius: 6px; }
+/* Down by default; turns up while open and back down on close (one transition, both directions) */
+.site-header-main__dropdown-arrow {
+  flex: none;
+  transform: rotate(0deg);
+  transition: transform .3s ease-in-out;
+}
+.site-header-main__dropdown-trigger[aria-expanded="true"] .site-header-main__dropdown-arrow { transform: rotate(180deg); }
+
+.site-header-main__submenu {
+  display: grid;
+  gap: 2px;
+  min-width: 290px;
+  margin: 0;
+  padding: 10px;
+  list-style: none;
+  border: 1px solid rgba(244, 118, 31, .24);
+  border-radius: 18px;
+  background: rgba(10, 4, 0, .97);
+  box-shadow: 0 28px 60px -24px rgba(0, 0, 0, .75);
+  backdrop-filter: blur(10px);
+}
+.site-header-main__submenu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-family: var(--font-epilogue), "Epilogue", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.35;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .2s ease, color .2s ease;
+}
+.site-header-main__submenu-link::after {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  opacity: 0;
+  transform: translateX(-6px) rotate(45deg);
+  transition: opacity .2s ease, transform .2s ease;
+}
+.site-header-main__submenu-link:hover,
+.site-header-main__submenu-link:focus-visible { background: rgba(244, 118, 31, .14); color: #ff9e1d; }
+.site-header-main__submenu-link:hover::after,
+.site-header-main__submenu-link:focus-visible::after { opacity: 1; transform: translateX(0) rotate(45deg); }
+.site-header-main__submenu-link:focus-visible { outline: 2px solid #ff9e1d; outline-offset: -2px; }
+.site-header-main__submenu-link[aria-current="page"] { color: #ff9e1d; font-weight: 600; }
+
+@media (min-width: 992px) {
+  .site-header-main__submenu-wrap {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 30;
+    padding-top: 16px; /* hover bridge between the link and the panel */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 10px);
+    /* Same 300ms as the arrow, so both move together */
+    transition: opacity .3s ease-in-out, transform .3s ease-in-out, visibility 0s linear .3s;
+  }
+  .site-header-main__dropdown.is-open .site-header-main__submenu-wrap {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+    transition: opacity .3s ease-in-out, transform .3s ease-in-out, visibility 0s;
+  }
+}
+@media (max-width: 991.98px) {
+  /* Full-width row in the collapsed menu: tap anywhere on it to expand, arrow on the right */
+  .site-header-main__dropdown-trigger { width: 100%; justify-content: space-between; text-align: left; }
+  .site-header-main__dropdown-arrow { width: 16px; height: 16px; }
+  .site-header-main__submenu-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows .3s ease, visibility 0s linear .3s;
+  }
+  .site-header-main__dropdown.is-open .site-header-main__submenu-wrap {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows .3s ease, visibility 0s;
+  }
+  .site-header-main__submenu {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 0 0 12px;
+    border: 0;
+    border-left: 1px solid rgba(244, 118, 31, .35);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .site-header-main__submenu-link { padding: 9px 10px; white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header-main__submenu-wrap,
+  .site-header-main__dropdown-arrow,
+  .site-header-main__submenu-link,
+  .site-header-main__submenu-link::after { transition: none; }
+}
+
+/* ---------- Services cards: each whole card links to its service page ---------- */
+/* The full-card overlay link stays clickable on the open card too, and the white description box lets
+   clicks through to it, so anywhere on a card navigates. Hover/open animations are unchanged. */
+.services-section-main__panel--active .services-section-main__trigger { cursor: pointer; }
+.services-section-main__desc { pointer-events: none; }

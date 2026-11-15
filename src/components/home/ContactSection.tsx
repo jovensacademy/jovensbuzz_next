@@ -6,13 +6,29 @@ interface ContactSectionProps {
   office: string;
   phone: string;
   email: string;
+  /** Heading and intro beside the form; each page has its own wording (defaults: the homepage's). */
+  title?: React.ReactNode;
+  description?: string;
 }
+
+const DEFAULT_TITLE = (
+  <>
+    Let&apos;s Unlock your <span className="site-footer-main__title-accent">brand&apos;s potential</span>
+  </>
+);
 
 /**
  * Contact section ("#contact": details + "Let’s Talk !" form) from the original page. Contact details come
  * from site content. Rendered as a <section>; the page footer is the separate Footer component.
+ * Used on the homepage and the inner pages, always with the same ContactForm (one enquiry API).
  */
-export function ContactSection({ office, phone, email }: ContactSectionProps) {
+export function ContactSection({
+  office,
+  phone,
+  email,
+  title = DEFAULT_TITLE,
+  description = "Jovens Buzz helps businesses grow through strategic social media, creative content and digital marketing.",
+}: ContactSectionProps) {
   const phoneHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
   return (
     <section className="site-footer-main" id="contact" aria-labelledby="siteFooterMainTitle">
@@ -24,11 +40,9 @@ export function ContactSection({ office, phone, email }: ContactSectionProps) {
           <div className="col-12 col-lg-6 site-footer-main__info" data-aos="fade-right">
             <div>
               <h2 className="site-footer-main__title" id="siteFooterMainTitle">
-                Let&apos;s Unlock your <span className="site-footer-main__title-accent">brand&apos;s potential</span>
+                {title}
               </h2>
-              <p className="site-footer-main__description">
-                Jovens Buzz helps businesses grow through strategic social media, creative content and digital marketing.
-              </p>
+              <p className="site-footer-main__description">{description}</p>
             </div>
             <address className="site-footer-main__contacts">
               {office && (

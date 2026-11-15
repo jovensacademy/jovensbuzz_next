@@ -43,3 +43,11 @@ export const inter = localFont({
   variable: "--font-inter",
   display: "swap",
 });
+
+// Used by the inner pages (About, Services, How We Work, Contact): body copy, labels and footers
+export const jakarta = localFont({
+  src: "./plus-jakarta-sans-latin-variable.woff2",
+  weight: "200 800",
+  variable: "--font-jakarta",
+  display: "swap",
+});

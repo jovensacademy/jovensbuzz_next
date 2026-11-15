@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- original markup preserved for pixel parity */
+import Link from "next/link";
+import { SERVICE_NAV } from "@/lib/service-pages";
 import { CtaButton } from "./CtaButton";
 
 export const SERVICE_PANELS = [
@@ -42,8 +44,14 @@ export const SERVICE_PANELS = [
   },
 ] as const;
 
-/** Image accordion; open/close behaviour is wired up in HomeInteractions. */
-export function ServicesSection() {
+/**
+ * Image accordion; open/close behaviour is wired up in HomeInteractions. Each whole card is a link to
+ * its service page: the full-card overlay (`__trigger`) is the link, and the orange arrow is a second,
+ * purely visual way in (same page, hidden from assistive tech and the tab order, never nested).
+ * With `linkToPages` (individual service pages) the header button goes to /services instead of #contact.
+ */
+export function ServicesSection({ linkToPages = false }: { linkToPages?: boolean } = {}) {
+  const panelHref = (label: string) => SERVICE_NAV.find((s) => s.name === label.trim())?.href ?? "#contact";
   return (
     <section className="services-section-main" id="services" aria-labelledby="servicesSectionMainTitle">
       <div className="container-fluid services-section-main__container">
@@ -55,7 +63,7 @@ export function ServicesSection() {
             <p className="services-section-main__description">Six services. One team. One consistent brand.</p>
           </div>
           <div className="col-12 col-lg-5 text-lg-end">
-            <CtaButton href="#contact" label="View All Services" className="services-section-main__button" />
+            <CtaButton href={linkToPages ? "/services" : "#contact"} label="View All Services" className="services-section-main__button" />
           </div>
         </div>
 
@@ -76,18 +84,13 @@ export function ServicesSection() {
                   loading={active ? undefined : "lazy"}
                   decoding="async"
                 />
-                <button className="services-section-main__trigger" type="button" aria-expanded={active} aria-controls={descId}>
+                <Link className="services-section-main__trigger" href={panelHref(panel.label)} aria-describedby={descId}>
                   <span className="services-section-main__label">{panel.label}</span>
-                </button>
+                </Link>
                 <div className="services-section-main__notch" aria-hidden="true" />
-                <a
-                  className="services-section-main__arrow"
-                  href="#contact"
-                  aria-label={`Ask about ${panel.label}`}
-                  tabIndex={active ? undefined : -1}
-                >
+                <Link className="services-section-main__arrow" href={panelHref(panel.label)} aria-hidden="true" tabIndex={-1}>
                   <img src="/assets/images/icon-arrow-up-right-white.svg" alt="" width={32} height={32} />
-                </a>
+                </Link>
                 <div className="services-section-main__desc" id={descId}>
                   <h3 className="services-section-main__desc-label">{panel.label}</h3>
                   <p className="services-section-main__desc-text">{panel.text}</p>

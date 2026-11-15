@@ -1,0 +1,227 @@
+/* Floating social bar: right edge, vertically centred, slides in from the right after ~600px of scroll. */
+.bar {
+  position: fixed;
+  top: 50%;
+  right: 18px;
+  z-index: 40; /* above page sections and the header (20), below the contact/success modals (1050+) */
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(calc(100% + 28px), -50%);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, visibility 0s linear 0.45s;
+  pointer-events: none;
+}
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, visibility 0s;
+  pointer-events: auto;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border: 1px solid rgba(244, 118, 31, 0.28);
+  border-radius: 20px;
+  background: rgba(10, 4, 0, 0.88);
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  backdrop-filter: blur(8px);
+}
+
+/*
+ * Motion is split across separate properties so the effects never fight each other:
+ *   li     → staggered entrance (opacity + transform)
+ *   .link  → gentle float (`translate`, keyframes) + hover / press (`scale`)
+ *   svg    → small tilt on hover (`rotate`)
+ * Transforms compose; none of them change layout.
+ */
+.list li {
+  opacity: 0;
+  transform: translateX(14px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.visible .list li {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.visible .list li:nth-child(1) {
+  transition-delay: 0.12s;
+}
+.visible .list li:nth-child(2) {
+  transition-delay: 0.22s;
+}
+.visible .list li:nth-child(3) {
+  transition-delay: 0.32s;
+}
+.visible .list li:nth-child(4) {
+  transition-delay: 0.42s;
+}
+
+@keyframes socialFloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -2px;
+  }
+}
+
+.link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  overflow: hidden;
+  /* Jovens Buzz orange, matching the CTA buttons */
+  background: linear-gradient(135deg, #ff9500 0%, #ff6a00 55%, #f45100 100%);
+  color: #fff;
+  box-shadow: 0 6px 14px -8px rgba(244, 81, 0, 0.7);
+  text-decoration: none;
+  transition: scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+  /*
+   * Float (translate) + a short attention shake (rotate, every 5s). Both run only while the bar is
+   * shown. Float offsets keep the icons out of step; the shake ripples down the bar 120ms apart,
+   * starting 1.5s after the bar appears so it never overlaps the entrance.
+   */
+  animation:
+    socialFloat 3.6s ease-in-out infinite paused,
+    socialShake 5s ease-in-out 1.5s infinite paused;
+}
+.visible .link {
+  animation-play-state: running;
+}
+.list li:nth-child(2) .link {
+  animation-delay: -0.9s, 1.62s;
+}
+.list li:nth-child(3) .link {
+  animation-delay: -1.8s, 1.74s;
+}
+.list li:nth-child(4) .link {
+  animation-delay: -2.7s, 1.86s;
+}
+/* No shaking while the visitor is pointing at (or tabbing through) the bar; float keeps running */
+.list:hover .link,
+.list:has(:focus-visible) .link {
+  animation-name: socialFloat, none;
+}
+
+/* ~0.7s of gentle ±3.5° shake with a soft orange glow, then still for the rest of the 5s cycle */
+@keyframes socialShake {
+  0%,
+  13%,
+  100% {
+    rotate: 0deg;
+    box-shadow: 0 6px 14px -8px rgba(244, 81, 0, 0.7), 0 0 16px -2px rgba(255, 149, 0, 0);
+  }
+  2.5% {
+    rotate: -3.5deg;
+  }
+  5% {
+    rotate: 3.5deg;
+    box-shadow: 0 6px 14px -8px rgba(244, 81, 0, 0.7), 0 0 16px -2px rgba(255, 149, 0, 0.6);
+  }
+  7.5% {
+    rotate: -2.5deg;
+  }
+  10% {
+    rotate: 1.5deg;
+    box-shadow: 0 6px 14px -8px rgba(244, 81, 0, 0.7), 0 0 16px -2px rgba(255, 149, 0, 0.6);
+  }
+}
+/* Brighter gradient faded in on hover (gradients themselves cannot be transitioned) */
+.link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #ffa31f 0%, #ff7a12 55%, #ff5a0a 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.link svg {
+  position: relative;
+  z-index: 1;
+  transition: rotate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.link:hover,
+.link:focus-visible {
+  scale: 1.08;
+  box-shadow: 0 0 0 1px rgba(255, 149, 0, 0.35), 0 10px 22px -8px rgba(255, 106, 0, 0.75), 0 0 18px -4px rgba(255, 149, 0, 0.55);
+  color: #fff;
+}
+.link:hover svg,
+.link:focus-visible svg {
+  rotate: -8deg;
+}
+/* Press-down on click / tap */
+.link:active {
+  scale: 0.94;
+  transition-duration: 0.12s;
+}
+.link:hover::before,
+.link:focus-visible::before {
+  opacity: 1;
+}
+.link:focus-visible {
+  outline: 2px solid #ff9e1d;
+  outline-offset: 3px;
+}
+
+@media (max-width: 767.98px) {
+  .bar {
+    right: 10px;
+  }
+  .list {
+    gap: 8px;
+    padding: 6px;
+    border-radius: 16px;
+  }
+  .link {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+  .link svg {
+    width: 18px;
+    height: 18px;
+  }
+  /* While a form field is focused (on-screen keyboard), step aside so it never covers inputs */
+  .fieldFocused {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .visible,
+  .list li,
+  .visible .list li,
+  .link,
+  .link::before,
+  .link svg {
+    transition: none;
+  }
+  .link {
+    animation: none;
+  }
+  .list li {
+    transform: none;
+  }
+  .link:hover,
+  .link:focus-visible,
+  .link:active {
+    scale: none;
+  }
+  .link:hover svg,
+  .link:focus-visible svg {
+    rotate: none;
+  }
+}
