@@ -251,6 +251,7 @@ const GALLERY: { direction: "up" | "down"; items: GalleryItem[] }[] = [
       { src: "/assets/images/pl-1.png", alt: "Team planning a campaign with charts, notes and sketches on a desk" },
       { src: "/assets/images/pl-2.png", alt: "A short-form video playing on a phone" },
       { src: "/assets/images/pl-6.png", alt: "A short-form video playing on a phone" },
+      { src: "/assets/images/pl-10.png", alt: "A short-form video playing on a phone" },
     ],
   },
   {
@@ -259,7 +260,7 @@ const GALLERY: { direction: "up" | "down"; items: GalleryItem[] }[] = [
      
       { src: "/assets/images/pl-3.png", alt: "Hands typing on a laptop beside a coffee" },
       { src: "/assets/images/pl-4.png", alt: "Social reactions floating above a laptop screen" },
-      { src: "/assets/images/pl-7.png", alt: "A designer working across two screens of brand visuals" }
+      { src: "/assets/images/pl-9.png", alt: "A designer working across two screens of brand visuals" }
     ],
   },
   {
