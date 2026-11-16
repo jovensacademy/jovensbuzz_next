@@ -248,22 +248,25 @@ const GALLERY: { direction: "up" | "down"; items: GalleryItem[] }[] = [
   {
     direction: "up",
     items: [
-      { src: "/assets/images/services-gallery-1.webp", alt: "Team planning a campaign with charts, notes and sketches on a desk" },
-      null,
-      { src: "/assets/images/services-gallery-4.webp", alt: "A short-form video playing on a phone" },
+      { src: "/assets/images/pl-1.png", alt: "Team planning a campaign with charts, notes and sketches on a desk" },
+      { src: "/assets/images/pl-2.png", alt: "A short-form video playing on a phone" },
+      { src: "/assets/images/pl-6.png", alt: "A short-form video playing on a phone" },
     ],
   },
   {
     direction: "down",
     items: [
-      null,
-      { src: "/assets/images/services-gallery-2.webp", alt: "Hands typing on a laptop beside a coffee" },
-      { src: "/assets/images/services-gallery-5.webp", alt: "Social reactions floating above a laptop screen" },
+     
+      { src: "/assets/images/pl-3.png", alt: "Hands typing on a laptop beside a coffee" },
+      { src: "/assets/images/pl-8.png", alt: "Social reactions floating above a laptop screen" },
+      { src: "/assets/images/pl-7.png", alt: "A designer working across two screens of brand visuals" }
     ],
   },
   {
     direction: "up",
-    items: [{ src: "/assets/images/services-gallery-3.webp", alt: "A designer working across two screens of brand visuals" }, null, null],
+    items: [ { src: "/assets/images/pl-5.png", alt: "A designer working across two screens of brand visuals" }, 
+      { src: "/assets/images/pl-7.png", alt: "A designer working across two screens of brand visuals" },
+      { src: "/assets/images/pl-1.png", alt: "Team planning a campaign with charts, notes and sketches on a desk" }],
   },
 ];
 

@@ -29,6 +29,8 @@ export interface ServicePage {
   /** Optional one-line description under each toolkit item (shown with "Step one"… labels) */
   toolkitDetails?: string[];
   outcome: { title: Accent; text: string };
+  /** Leave out the outcome section (heading, description and image gallery) on this service page */
+  hideOutcomeSection?: boolean;
   closing: Accent;
 }
 
@@ -78,6 +80,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "content-creation",
+    hideOutcomeSection: true,
     name: "Content Creation",
     code: "Service 02 / Content",
     seoTitle: "Content Creation – Jovens Buzz",
@@ -108,6 +111,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "short-form-video-reels",
+    hideOutcomeSection: true,
     name: "Short-form Video & Reels",
     code: "Service 03 / Video",
     seoTitle: "Short-form Video & Reels – Jovens Buzz",
@@ -199,6 +203,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "website-development",
+    hideOutcomeSection: true,
     name: "Website Development",
     code: "Service 06 / Web",
     seoTitle: "Website Development – Jovens Buzz",
@@ -214,7 +219,7 @@ export const SERVICE_PAGES: ServicePage[] = [
       image: img("laptop-img.png", "A laptop displaying a responsive website design", 619, 675),
     },
     steps: [
-      step("01", "Plan the experience", "We understand your goals, audience, content needs and the actions visitors should take.", img("Plan-the-experience.png", "A strategist mapping a plan on a whiteboard for two colleagues", 464, 348)),
+      step("01", "Plan the experience", "We understand your goals, audience, content needs and the actions visitors should take.", img("pl-1.png", "A strategist mapping a plan on a whiteboard for two colleagues", 464, 348)),
       step("02", "Structure the pages", "We organise the information into a clear sitemap and page flow, with useful navigation and content hierarchy.", img("Structure-the-pages.png", "Team planning a campaign with charts, notes and sketches on a desk", 560, 560)),
       step("03", "Design and develop", "We bring the approved direction to life with responsive layouts and functional website elements.", img("Design-and-develop.png", "Hands typing on a laptop beside a coffee", 560, 560)),
       step("04", "Test and launch", "We check key pages and interactions across screen sizes, refine the experience and prepare the site for launch.", img("Test-and-launch.png", "A team analysing results charts during a meeting", 464, 348)),

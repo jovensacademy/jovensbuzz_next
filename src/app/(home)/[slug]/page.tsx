@@ -70,7 +70,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           )}
         />
         <ServicesListSection steps={service.steps} />
-        <ServicesGallerySection title={service.outcome.title} description={service.outcome.text} />
+        {!service.hideOutcomeSection && <ServicesGallerySection title={service.outcome.title} description={service.outcome.text} />}
         {/* Service-specific FAQs (replace the site-wide FAQ list on these pages) */}
         {faqs && <ServiceFaqSection faqs={faqs} />}
         <IdeaCtaSection title={service.closing} />
