@@ -342,7 +342,7 @@
   height: 96px;
 }
 .jb-contact-popup__form-pane .contact-form-section-main__submit {
-  margin-top: 8px;
+  margin-top: 20px; /* breathing room below the privacy policy checkbox */
   width: 100%;
   max-width: 320px;
 }
