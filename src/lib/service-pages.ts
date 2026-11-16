@@ -211,7 +211,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     problem: {
       title: { lead: "Your website should work as hard", accent: "as your business." },
       text: "A confusing layout, unclear message or difficult enquiry path can make interested visitors leave without acting. A well-planned website brings your information, design and user journey together so people can find what they need with less effort.",
-      image: img("services/website-development-overview.webp", "A laptop displaying a responsive website design", 619, 675),
+      image: img("laptop-img.png", "A laptop displaying a responsive website design", 619, 675),
     },
     steps: [
       step("01", "Plan the experience", "We understand your goals, audience, content needs and the actions visitors should take.", img("Plan-the-experience.png", "A strategist mapping a plan on a whiteboard for two colleagues", 464, 348)),

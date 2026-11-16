@@ -7,8 +7,8 @@ import styles from "./privacy.module.css";
 
 // Same title, description and canonical as before; the page now uses the inner-page header and footer
 export const metadata: Metadata = {
-  title: { absolute: "Privacy Policy | Jovens Buzz" },
-  description: "How Jovens Buzz collects, uses and protects the information you share through our website.",
+  title: { absolute: "Privacy Policy | Jovens Buzz LLC" },
+  description: "How Jovens Buzz LLC collects, uses and protects the information you share through our website.",
   alternates: { canonical: "/privacy-policy" },
   robots: { index: true, follow: true },
 };
@@ -35,14 +35,14 @@ export default async function PrivacyPolicyPage() {
         <div className={styles.page}>
           <article className={styles.article}>
             <p>
-              Jovens Buzz is a digital marketing and creative agency based in the Dallas–Fort Worth (DFW) area of Texas, serving small
+              Jovens Buzz LLC is a digital marketing and creative agency based in the Dallas–Fort Worth (DFW) area of Texas, serving small
               and growing businesses. This Privacy Policy explains how we collect, use, disclose and protect personal information when
               you visit our website, contact us, request a quote, or work with us.
             </p>
 
             <h2>1. Who We Are</h2>
             <p>
-              “Jovens Buzz,” “we,” “us” and “our” refer to Jovens Buzz llc, a business operating in the Dallas–Fort Worth area of Texas,
+              “Jovens Buzz LLC,” “we,” “us” and “our” refer to Jovens Buzz LLC, a business operating in the Dallas–Fort Worth area of Texas,
               United States. We provide services such as social media marketing, content creation, short-form video and reels, creative
               marketing design, brand identity and website development.
             </p>
@@ -140,7 +140,7 @@ export default async function PrivacyPolicyPage() {
 
             <h2>5. Client Materials and Social Media Accounts</h2>
             <p>
-              When you engage Jovens Buzz, you may provide brand assets, customer-facing content, account access, website credentials or
+              When you engage Jovens Buzz LLC, you may provide brand assets, customer-facing content, account access, website credentials or
               other materials so we can deliver the agreed services. We use these materials only as needed to perform the work,
               communicate with you, maintain project records and meet legal or contractual obligations.
             </p>
@@ -167,7 +167,7 @@ export default async function PrivacyPolicyPage() {
               own privacy notices.
             </p>
             <p>
-              Before publishing this policy, Jovens Buzz should verify which cookies, analytics tools, pixels and advertising tags are
+              Before publishing this policy, Jovens Buzz LLC should verify which cookies, analytics tools, pixels and advertising tags are
               actually active on the website and update this section to name them where appropriate.
             </p>
 
@@ -215,8 +215,8 @@ export default async function PrivacyPolicyPage() {
               If you are a Texas resident, the Texas Data Privacy and Security Act (TDPSA) may provide rights such as access, correction,
               deletion and certain opt-outs to consumers whose information is covered by the Act. The Act generally exempts qualifying
               small businesses, subject to an important limitation concerning the sale of sensitive data. Whether the Act applies to
-              Jovens Buzz depends on the business’s actual size, activities, data practices and any applicable exceptions. This policy
-              does not represent that Jovens Buzz is necessarily covered by every provision of the TDPSA.
+              Jovens Buzz LLC depends on the business’s actual size, activities, data practices and any applicable exceptions. This policy
+              does not represent that Jovens Buzz LLC is necessarily covered by every provision of the TDPSA.
             </p>
             <p>
               If a privacy law gives you a right to appeal a decision on a privacy request, you may reply to our decision email with
@@ -239,7 +239,7 @@ export default async function PrivacyPolicyPage() {
 
             <h2>13. Visitors from Outside the United States</h2>
             <p>
-              Jovens Buzz is based in the United States. If you access our website or communicate with us from another country, your
+              Jovens Buzz LLC is based in the United States. If you access our website or communicate with us from another country, your
               information may be processed in the United States or other locations where we or our service providers operate. Privacy
               protections in those locations may differ from those in your home jurisdiction.
             </p>
@@ -255,7 +255,7 @@ export default async function PrivacyPolicyPage() {
             <p>For questions about this Privacy Policy or to submit a privacy request, contact:</p>
             <ul className={styles.details}>
               <li>
-                <strong>Jovens Buzz Llc</strong>
+                <strong>Jovens Buzz LLC</strong>
               </li>
               <li>
                 <strong>Email:</strong> <Mail to="hello@jovensbuzz.com" />

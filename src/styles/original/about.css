@@ -384,14 +384,34 @@
   border-radius: 15%;         /* 12 / 80 */
   background: #fafafa;
   box-shadow: 0 calc(14 * var(--a)) calc(42 * var(--a)) rgba(120, 120, 120, .3);
-  animation: about-brand-float 6s ease-in-out infinite;
+  /* 3D parallax float: a slow 8s drift around a small oval (±5% sideways, up to 8% up) while easing
+     ~16px towards the viewer at the top, for a gentle sense of depth. Each box runs 1.25s behind its
+     left-hand neighbour. Movement only (one compositor-friendly `transform`): no rotation, scaling,
+     shadow or colour change. */
+  animation: about-brand-parallax 8s linear infinite;
 }
 .about-brand-section-main__icon { width: 60%; height: auto; }
-.about-brand-section-main__icon-box--eye   { left: 10%;    top: 20.51%; background: #fff; }
-.about-brand-section-main__icon-box--chart { left: 53.89%; top: 17.5%;  animation-duration: 7.5s; animation-delay: -2s; }
-.about-brand-section-main__icon-box--bulb  { left: 37.36%; top: 49.92%; animation-duration: 5.5s; animation-delay: -3.5s; }
-.about-brand-section-main__icon-box--team  { left: 67.22%; top: 77.68%; animation-duration: 8s;   animation-delay: -1s; }
-@keyframes about-brand-float { 50% { transform: translateY(-8%); } }
+/* Stagger follows the boxes from left to right: eye → bulb → chart → team */
+.about-brand-section-main__icon-box--eye   { left: 10%;    top: 20.51%; background: #fff; animation-delay: -3.75s; }
+.about-brand-section-main__icon-box--bulb  { left: 37.36%; top: 49.92%; animation-delay: -2.5s; }
+.about-brand-section-main__icon-box--chart { left: 53.89%; top: 17.5%;  animation-delay: -1.25s; }
+.about-brand-section-main__icon-box--team  { left: 67.22%; top: 77.68%; animation-delay: 0s; }
+/* 12 points on the oval (every 30°: x = 5%·sinθ, y = −4%·(1−cosθ), z = 8px·(1−cosθ)), joined linearly
+   so the path flows without stopping */
+@keyframes about-brand-parallax {
+  0%, 100% { transform: perspective(800px) translate3d(0, 0, 0); }
+  8.333%   { transform: perspective(800px) translate3d(2.5%, -0.54%, 1.07px); }
+  16.667%  { transform: perspective(800px) translate3d(4.33%, -2%, 4px); }
+  25%      { transform: perspective(800px) translate3d(5%, -4%, 8px); }
+  33.333%  { transform: perspective(800px) translate3d(4.33%, -6%, 12px); }
+  41.667%  { transform: perspective(800px) translate3d(2.5%, -7.46%, 14.93px); }
+  50%      { transform: perspective(800px) translate3d(0, -8%, 16px); }
+  58.333%  { transform: perspective(800px) translate3d(-2.5%, -7.46%, 14.93px); }
+  66.667%  { transform: perspective(800px) translate3d(-4.33%, -6%, 12px); }
+  75%      { transform: perspective(800px) translate3d(-5%, -4%, 8px); }
+  83.333%  { transform: perspective(800px) translate3d(-4.33%, -2%, 4px); }
+  91.667%  { transform: perspective(800px) translate3d(-2.5%, -0.54%, 1.07px); }
+}
 
 /* ---- Logo ---- */
 .about-brand-section-main__logo {

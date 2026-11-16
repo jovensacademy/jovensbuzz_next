@@ -91,7 +91,7 @@
   line-height: 0;
 }
 .logo img {
-  width: clamp(170px, 26vw, 380px);
+  width: clamp(170px, 26vw, 350px);
   height: auto;
 }
 .privacy {

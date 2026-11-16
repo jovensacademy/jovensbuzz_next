@@ -448,6 +448,7 @@
   padding: max(56px, calc(73 * var(--a))) 0 max(48px, calc(74 * var(--a)));
   overflow: hidden;
   background: #fff;
+  display: none;
 }
 .services-gallery-section-main__header { max-width: max(300px, calc(764 * var(--a))); margin: 0 auto; text-align: center; }
 .services-gallery-section-main__title {
