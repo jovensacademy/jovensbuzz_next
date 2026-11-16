@@ -258,7 +258,7 @@ const GALLERY: { direction: "up" | "down"; items: GalleryItem[] }[] = [
     items: [
      
       { src: "/assets/images/pl-3.png", alt: "Hands typing on a laptop beside a coffee" },
-      { src: "/assets/images/pl-8.png", alt: "Social reactions floating above a laptop screen" },
+      { src: "/assets/images/pl-4.png", alt: "Social reactions floating above a laptop screen" },
       { src: "/assets/images/pl-7.png", alt: "A designer working across two screens of brand visuals" }
     ],
   },

@@ -22,3 +22,28 @@
     max-width: 100%;
   }
 }
+
+/* Gallery image cards (service detail pages only): clean 10px cards with no cream background, border
+   or orange shadow. The gallery PNGs carry a transparent margin (9px left/right, 2px top, 15px bottom of
+   386px) that let the card background show as an orange frame, so each image is enlarged and offset
+   just enough for that margin to fall outside the card and be clipped. Card size and grid unchanged. */
+.page :global(.services-gallery-section-main__item) {
+  border-radius: 10px;
+}
+.page :global(.services-gallery-section-main__item:not(.services-gallery-section-main__item--placeholder)) {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.page :global(.services-gallery-section-main__item:not(.services-gallery-section-main__item--placeholder):hover) {
+  box-shadow: none;
+}
+.page :global(.services-gallery-section-main__image) {
+  position: absolute;
+  top: -0.542%; /* -2 / 369 */
+  left: -2.446%; /* -9 / 368 */
+  width: 104.891%; /* 386 / 368 */
+  height: 104.607%; /* 386 / 369 */
+  max-width: none;
+  object-fit: fill;
+}
