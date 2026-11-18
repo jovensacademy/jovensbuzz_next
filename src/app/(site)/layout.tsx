@@ -1,3 +1,4 @@
+import { GoogleTagManager, GoogleTagManagerFallback } from "@/components/GoogleTagManager";
 import type { Metadata, Viewport } from "next";
 import { inter, sora } from "@/fonts";
 import { siteConfig } from "@/lib/config";
@@ -24,7 +25,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${sora.variable} ${inter.variable}`}>
       {/* Browser extensions (e.g. ColorZilla's cz-shortcut-listen) add attributes to <body> before hydration */}
-      <body suppressHydrationWarning>{children}</body>
+      <head><GoogleTagManager /></head>
+      <body suppressHydrationWarning>
+        <GoogleTagManagerFallback />
+        {children}
+      </body>
     </html>
   );
 }

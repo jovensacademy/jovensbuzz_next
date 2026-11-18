@@ -7,12 +7,13 @@ const publicApi = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8081
 // bootstrapping and the JSON-LD blocks unless nonces are used; everything else is locked down.
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://tagmanager.google.com${isDev ? " 'unsafe-eval'" : ""}`,
   // Fonts are self-hosted (src/fonts via next/font/local), so no third-party style or font hosts
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
-  "font-src 'self'",
-  `connect-src 'self' ${publicApi}${isDev ? " ws: wss:" : ""}`,
+  "style-src 'self' 'unsafe-inline' https://tagmanager.google.com https://fonts.googleapis.com",
+  "img-src 'self' data: blob: https://www.googletagmanager.com https://ssl.gstatic.com https://www.gstatic.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  `connect-src 'self' ${publicApi} https://www.googletagmanager.com https://www.google.com${isDev ? " ws: wss:" : ""}`,
+  "frame-src 'self' https://www.googletagmanager.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

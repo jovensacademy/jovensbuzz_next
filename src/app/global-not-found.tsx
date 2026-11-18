@@ -1,3 +1,4 @@
+import { GoogleTagManager, GoogleTagManagerFallback } from "@/components/GoogleTagManager";
 import type { Metadata } from "next";
 import { inter, sora } from "@/fonts";
 import { siteConfig } from "@/lib/config";
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
 export default function GlobalNotFound() {
   return (
     <html lang="en" className={`${sora.variable} ${inter.variable}`}>
+      <head><GoogleTagManager /></head>
       <body>
+        <GoogleTagManagerFallback />
         <NotFound />
       </body>
     </html>

@@ -1,3 +1,4 @@
+import { GoogleTagManager, GoogleTagManagerFallback } from "@/components/GoogleTagManager";
 import type { Metadata, Viewport } from "next";
 // Same stylesheets, in the same order, as the original frontend/index.html
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -46,6 +47,7 @@ export default async function HomeRootLayout({ children }: Readonly<{ children: 
       suppressHydrationWarning
     >
       <head>
+        <GoogleTagManager />
         <script dangerouslySetInnerHTML={{ __html: motionBootstrap }} />
         <noscript>
           <style>{`[data-aos]{opacity:1 !important;transform:none !important;}`}</style>
@@ -53,6 +55,7 @@ export default async function HomeRootLayout({ children }: Readonly<{ children: 
       </head>
       {/* Browser extensions (e.g. ColorZilla's cz-shortcut-listen) add attributes to <body> before hydration */}
       <body className="jb-page-main" suppressHydrationWarning>
+        <GoogleTagManagerFallback />
         {children}
         <SocialSidebar
           linkedin={SOCIAL_URLS.social_linkedin}
