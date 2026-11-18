@@ -12,7 +12,7 @@ const ROW_LEFT: Industry[] = [
 
 const ROW_RIGHT: Industry[] = [
   { icon: "healthcare", tone: "green", width: 404, label: "Healthcare" },
-  { icon: "manufacturing", tone: "peach", width: 498, label: "Manufacturing" },
+ { icon: "restaurants", tone: "peach", width: 498, label: <>Restaurants<br />&amp; Cafes</> },
   { icon: "fashion", tone: "blue", width: 388, label: "Fashion" },
   { icon: "startups", tone: "green", width: 404, label: "Startups" },
   { icon: "education", tone: "blue", width: 388, label: "Education" },

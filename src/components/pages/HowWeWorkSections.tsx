@@ -39,6 +39,14 @@ export function HowWeWorkHeroSection() {
   );
 }
 
+const howWeWorkImages = [
+  "/assets/images/pup-1.png",
+  "/assets/images/pup-2.png",
+  "/assets/images/pup-3.png",
+  "/assets/images/pup-4.png",
+  "/assets/images/pup-5.png",
+];
+
 const STEPS = [
   { title: "Discover", text: "We understand your business, audience and goals.", alt: "Team members reviewing analytics on a large screen" },
   { title: "Strategize", text: "We build a content roadmap and monthly calendar.", alt: "A strategist mapping a plan on a whiteboard for two colleagues" },
@@ -75,11 +83,11 @@ export function HowWeWorkProcessSection() {
                 <div className="how-we-work-process-section-main__media">
                   <Image
                     className="how-we-work-process-section-main__image"
-                    src={`/assets/images/how-we-work-step-${index + 1}.webp`}
+                    src={howWeWorkImages[index]}
                     alt={step.alt}
-                    width={464}
-                    height={348}
-                    sizes="(min-width: 992px) 464px, 90vw"
+                    width={468}
+                    height={352}
+                    unoptimized
                   />
                 </div>
                 <span className="how-we-work-process-section-main__dot" aria-hidden="true" />
