@@ -23,11 +23,11 @@ export interface ServicePage {
   headline: Accent;
   /** "The Service" paragraph */
   intro: string;
+  cardTitles: [string, string, string];
   problem: { title: Accent; text: string; image: Img };
   steps: [ServiceStep, ServiceStep, ServiceStep, ServiceStep];
   toolkit: string[];
-  /** Optional one-line description under each toolkit item (shown with "Step one"… labels) */
-  toolkitDetails?: string[];
+  toolkitDetails: string[];
   outcome: { title: Accent; text: string };
   /** Leave out the outcome section (heading, description and image gallery) on this service page */
   hideOutcomeSection?: boolean;
@@ -36,20 +36,12 @@ export interface ServicePage {
 
 const img = (src: string, alt: string, width: number, height: number): Img => ({ src: `/assets/images/${src}`, alt, width, height });
 
-// One-line description under each "What This Can Include" item (same five lines on every service page)
-const TOOLKIT_DETAILS = [
-  "We align goals, audience, scope, and success metrics.",
-  "We define messaging, visual mood, and layout priorities.",
-  "We craft screens, components, and key visuals with a clear hierarchy.",
-  "We iterate fast, validate details, and polish for consistency.",
-  "We ship final files, handoff docs, and launch-ready assets.",
-];
-
 const step = (number: string, name: string, text: string, image: Img): ServiceStep => ({ number, name, text, image });
 
 export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: "social-media-marketing",
+    cardTitles: ["Strategy Planning","Content Scheduling","Audience Engagement"],
     name: "Social Media Marketing",
     code: "Service 01 / SMM",
     seoTitle: "Social Media Marketing – Jovens Buzz",
@@ -71,7 +63,13 @@ export const SERVICE_PAGES: ServicePage[] = [
       step("04", "Review and refine", "We look at audience response and performance signals, then use those insights to improve what comes next.", img("services/social-media-marketing-step-4.png", "Two colleagues reviewing performance charts on a tablet", 258, 276)),
     ],
     toolkit: ["Social media strategy", "Content calendar and planning", "Platform-specific content", "Publishing and consistency", "Performance review and optimisation"],
-    toolkitDetails: TOOLKIT_DETAILS,
+    toolkitDetails: [
+      "We align your goals, audience, and direction.",
+      "We plan what to post and when.",
+      "We tailor content to each platform's strengths.",
+      "We keep your brand active and consistent.",
+      "We learn from results and improve what works.",
+    ],
     outcome: {
       title: { lead: "A social presence", accent: "with purpose." },
       text: "Your audience gets a clearer picture of who you are, what you offer and why they should pay attention. You get a more organised way to show up online—without having to figure out every post from scratch.",
@@ -80,6 +78,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "content-creation",
+    cardTitles: ["Creative Copy","Content Ideas","Brand Storytelling"],
     hideOutcomeSection: true,
     name: "Content Creation",
     code: "Service 02 / Content",
@@ -102,7 +101,13 @@ export const SERVICE_PAGES: ServicePage[] = [
       step("04", "Polish for connection", "We refine the language, flow and call to action so every piece feels clear, natural and on-brand.", img("services/content-creation-step-4.png", "Hands at a laptop with the word Content on screen", 258, 276)),
     ],
     toolkit: ["Content ideas and themes", "Captions and social copy", "Reel and video scripts", "Carousel and campaign copy", "Brand messaging and storytelling"],
-    toolkitDetails: TOOLKIT_DETAILS,
+    toolkitDetails: [
+      "We find ideas that connect with your audience.",
+      "We turn your ideas into clear, engaging words.",
+      "We shape ideas into stories people want to watch.",
+      "We make every slide move your message forward.",
+      "We give your brand a voice people remember.",
+    ],
     outcome: {
       title: { lead: "Content people can understand—", accent: "and remember." },
       text: "From a quick scroll to a closer look, your content gives people a reason to stay, learn and connect. Every message feels more consistent, more intentional and more recognisably yours.",
@@ -111,6 +116,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "short-form-video-reels",
+    cardTitles: ["Video Production","Reel Editing","Visual Storytelling"],
     hideOutcomeSection: true,
     name: "Short-form Video & Reels",
     code: "Service 03 / Video",
@@ -133,7 +139,13 @@ export const SERVICE_PAGES: ServicePage[] = [
       step("04", "Finish with purpose", "We refine the final cut for the platform and add a clear next step where it makes sense.", img("services/short-form-video-reels-step-4.png", "An editor finishing a video on a multi-monitor editing setup", 258, 276)),
     ],
     toolkit: ["Reel concepts and creative direction", "Short-form scripts and shot plans", "Video editing and pacing", "Text, captions and sound treatment", "Platform-ready video formats"],
-    toolkitDetails: TOOLKIT_DETAILS,
+    toolkitDetails: [
+      "We turn your vision into compelling video ideas.",
+      "We plan every scene before the camera rolls.",
+      "We make every cut feel purposeful.",
+      "We make your videos clear, polished, and engaging.",
+      "We prepare videos for every platform you use.",
+    ],
     outcome: {
       title: { lead: "More than views—", accent: "a stronger brand impression." },
       text: "Your audience gets to see, hear and understand your brand in a format that feels immediate. Use video to introduce an offer, answer a question, show a process or put a human face to your business.",
@@ -142,6 +154,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "creative-marketing-design",
+    cardTitles: ["Social Creatives","Ad Designs","Visual Assets"],
     name: "Creative Marketing Design",
     code: "Service 04 / Design",
     seoTitle: "Creative Marketing Design – Jovens Buzz",
@@ -163,7 +176,13 @@ export const SERVICE_PAGES: ServicePage[] = [
       step("04", "Prepare for use", "We refine and adapt the final creative to the required platforms and formats.", img("services/creative-marketing-design-step-4.png", "A design file open on a monitor above printed layout sketches", 258, 276)),
     ],
     toolkit: ["Social media creatives", "Campaign and promotional graphics", "Digital ads and marketing assets", "Event and announcement designs", "Format adaptations for platforms"],
-    toolkitDetails: TOOLKIT_DETAILS,
+    toolkitDetails: [
+      "We make your posts clear and eye-catching.",
+      "We turn your promotions into visuals that stand out.",
+      "We design visuals that support your campaign goals.",
+      "We make important moments impossible to miss.",
+      "We adapt designs without losing their impact.",
+    ],
     outcome: {
       title: { lead: "Visuals that attract attention", accent: "and make sense." },
       text: "Your message becomes easier to notice, understand and remember. Consistent creative design also helps your brand look considered at every touchpoint.",
@@ -172,6 +191,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "brand-identity-branding",
+    cardTitles: ["Logo Design","Brand Identity","Brand Guidelines"],
     name: "Brand Identity & Branding",
     code: "Service 05 / Branding",
     seoTitle: "Brand Identity & Branding – Jovens Buzz",
@@ -181,7 +201,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     tagline: "Be recognised before you’re even read.",
     headline: { lead: "Give your brand a", accent: "look people recognise." },
     intro:
-      "A brand is more than a logo. It is the feeling, voice and visual character people come to associate with your business. We help bring those elements together into an identity that feels distinctive, consistent and ready to grow with you.",
+      "A brand is more than a logo. It's the feeling, voice and visual character people come to associate with your business. We help bring those elements together into an identity that feels distinctive, consistent and ready to grow with you.",
     problem: {
       title: { lead: "A recognisable brand", accent: "builds familiarity." },
       text: "When your visuals and messaging change from one touchpoint to another, it becomes harder for people to remember you. A clear identity gives your business a consistent way to show up—and helps customers know they’re in the right place.",
@@ -194,7 +214,13 @@ export const SERVICE_PAGES: ServicePage[] = [
       step("04", "Bring it together", "We organise the identity so it can be used consistently across your digital and marketing touchpoints.", img("services/brand-identity-branding-step-4.png", "Two colleagues presenting brand charts on a screen in a meeting room", 258, 276)),
     ],
     toolkit: ["Brand discovery and direction", "Logo and visual identity development", "Colour and typography direction", "Supporting brand elements", "Brand guidelines and usage direction"],
-    toolkitDetails: TOOLKIT_DETAILS,
+    toolkitDetails: [
+      "We understand your business before shaping your brand.",
+      "We create an identity that represents your business.",
+      "We build a visual language your audience recognises.",
+      "We bring your identity together with cohesive details.",
+      "We keep your brand consistent wherever it appears.",
+    ],
     outcome: {
       title: { lead: "One identity.", accent: "A consistent impression." },
       text: "Your business gets a recognisable visual and verbal foundation—making it easier to create future content, communicate clearly and build familiarity over time.",
@@ -203,6 +229,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   },
   {
     slug: "website-development",
+    cardTitles: ["Website Design","Responsive Design","User Experience"],
     hideOutcomeSection: true,
     name: "Website Development",
     code: "Service 06 / Web",
@@ -225,7 +252,13 @@ export const SERVICE_PAGES: ServicePage[] = [
       step("04", "Test and launch", "We check key pages and interactions across screen sizes, refine the experience and prepare the site for launch.", img("Test-and-launch.png", "A team analysing results charts during a meeting", 464, 348)),
     ],
     toolkit: ["Website structure and page planning", "UI/UX design", "Responsive website development", "Content placement and page layout", "Testing and launch support"],
-    toolkitDetails: TOOLKIT_DETAILS,
+    toolkitDetails: [
+      "We organise pages around what visitors need.",
+      "We make every interaction simple and intuitive.",
+      "We make your website work across every screen.",
+      "We put the right information in the right place.",
+      "We check every detail before your website goes live.",
+    ],
     outcome: {
       title: { lead: "A website that makes", accent: "the next step clear." },
       text: "Visitors can understand your offer, explore your services and contact you with confidence. Your business gets a digital home that supports credibility, communication and growth.",

@@ -68,7 +68,7 @@ const STATS = [
 const INTRO =
   "People often notice the visual before they read the words. We turn your message into thoughtful, attention-grabbing designs that make information easier to understand and your brand easier to recognise—across social media and marketing touchpoints.";
 
-export function ServicesIntroSection({ description = INTRO }: { description?: string } = {}) {
+export function ServicesIntroSection({ description = INTRO, cardTitles }: { description?: string; cardTitles?: string[] } = {}) {
   return (
     <section className="services-intro-section-main" aria-labelledby="servicesIntroSectionMainTitle">
       <div className="container-fluid services-intro-section-main__container">
@@ -83,7 +83,14 @@ export function ServicesIntroSection({ description = INTRO }: { description?: st
               {description}
             </p>
             <div className="row services-intro-section-main__stats">
-              {STATS.map((stat, index) => (
+              {cardTitles ? cardTitles.map((title, index) => (
+                <div key={title} className="col-12 col-md-4" data-aos="fade-up" data-aos-delay={String(index * 120)}>
+                  <div className="services-intro-section-main__stat services-intro-section-main__card" data-tilt="" data-tilt-max="6">
+                    <img className="services-intro-section-main__stat-icon" src="/assets/images/service-card-arow.svg" alt="" width={38} height={38} />
+                    <h3 className="services-intro-section-main__card-title">{title}</h3>
+                  </div>
+                </div>
+              )) : STATS.map((stat, index) => (
                 <div key={stat.label} className="col-12 col-sm-4" data-aos="fade-up" data-aos-delay={String(index * 120)}>
                   <div className="services-intro-section-main__stat" data-tilt="" data-tilt-max="6">
                     <img className="services-intro-section-main__stat-icon" src="/assets/images/icon-arrow-up-right.svg" alt="" width={32} height={32} />
@@ -150,7 +157,7 @@ export function ServicesStrategySection({
   );
 }
 
-type IncludeStep = { label: string; title: string; text?: string };
+type IncludeStep = { label?: string; title: string; text?: string };
 
 const INCLUDE_DESCRIPTION =
   "We focus on delivering quality without unnecessary complexity — from carefully crafted flavors to a clear and efficient process.";
@@ -185,8 +192,8 @@ export function ServicesIncludeSection({
           <div className="col-12 col-lg-6">
             <ol className="list-unstyled services-include-section-main__steps" data-step-progress="">
               {steps.map((step, index) => (
-                <li key={step.label} className="services-include-section-main__step" data-step="" data-aos="fade-up" data-aos-delay={index ? String(index * 80) : undefined}>
-                  <p className="services-include-section-main__step-label">{step.label}</p>
+                <li key={step.title} className="services-include-section-main__step" data-step="" data-aos="fade-up" data-aos-delay={index ? String(index * 80) : undefined}>
+                  {step.label && <p className="services-include-section-main__step-label">{step.label}</p>}
                   <h3 className="services-include-section-main__step-title">{step.title}</h3>
                   {step.text && <p className="services-include-section-main__step-text">{step.text}</p>}
                 </li>

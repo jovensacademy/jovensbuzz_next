@@ -180,6 +180,9 @@
   color: #fff;
   isolation: isolate;
 }
+.about-values-section-main--artwork {
+  background: #000 url("/assets/images/about-ourvalue-sec-back.png") center / cover no-repeat;
+}
 .about-values-section-main__glow {
   position: absolute;
   inset: auto 0 0;

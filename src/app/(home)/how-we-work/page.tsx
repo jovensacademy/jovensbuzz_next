@@ -7,7 +7,8 @@ import { HomeInteractions } from "@/components/home/HomeInteractions";
 import { HowWeWorkDeliverablesSection, HowWeWorkHeroSection, HowWeWorkProcessSection } from "@/components/pages/HowWeWorkSections";
 import { IdeaCtaSection } from "@/components/pages/IdeaCtaSection";
 import { PageInteractions } from "@/components/pages/PageInteractions";
-import { getFaqs, getSiteContent } from "@/lib/api/public";
+import { getSiteContent } from "@/lib/api/public";
+import { HOW_WE_WORK_FAQS } from "@/lib/page-faqs";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 import { breadcrumbJsonLd, serializeJsonLd } from "@/lib/seo/structured-data";
 import "@/styles/original/pages.css";
@@ -20,7 +21,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function HowWeWorkPage() {
-  const [content, faqs] = await Promise.all([getSiteContent(), getFaqs()]);
+  const content = await getSiteContent();
 
   return (
     <>
@@ -30,7 +31,7 @@ export default async function HowWeWorkPage() {
         <HowWeWorkProcessSection />
         <HowWeWorkDeliverablesSection />
         <IdeaCtaSection />
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={HOW_WE_WORK_FAQS} />
         <CtaSection />
       </main>
       <ContactSection

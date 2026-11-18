@@ -13,7 +13,8 @@ import {
   AboutValuesSection,
 } from "@/components/pages/AboutSections";
 import { PageInteractions } from "@/components/pages/PageInteractions";
-import { getFaqs, getSiteContent } from "@/lib/api/public";
+import { getSiteContent } from "@/lib/api/public";
+import { ABOUT_FAQS } from "@/lib/page-faqs";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 import { breadcrumbJsonLd, serializeJsonLd } from "@/lib/seo/structured-data";
 import "@/styles/original/about.css";
@@ -26,7 +27,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function AboutPage() {
-  const [content, faqs] = await Promise.all([getSiteContent(), getFaqs()]);
+  const content = await getSiteContent();
 
   return (
     <>
@@ -34,11 +35,11 @@ export default async function AboutPage() {
       <main>
         <AboutHeroSection />
         <AboutIntroSection />
-        <AboutValuesSection />
+        <AboutValuesSection artwork />
         <AboutBrandSection />
         <AboutFounderSection />
         <AboutTeamSection />
-        <FAQSection faqs={faqs} />
+        <FAQSection faqs={ABOUT_FAQS} />
         <CtaSection title="Tell us about your business. Let’s grow your social presence." wide arrow={false} />
       </main>
       <ContactSection

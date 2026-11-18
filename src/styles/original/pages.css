@@ -175,6 +175,23 @@
   transition: transform .3s ease;
 }
 .services-intro-section-main__stat:hover .services-intro-section-main__stat-icon { transform: translate(3px, -3px); }
+.services-intro-section-main__card-title {
+  margin: 0;
+  max-width: min-content;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+@media (min-width: 992px) and (max-width: 1279px) {
+  .services-intro-section-main__card-title { font-size: 1.45rem; }
+}
+@media (min-width: 1600px) {
+  .services-intro-section-main__card-title { font-size: 2.75rem; }
+}
+@media (max-width: 767px) {
+  .services-intro-section-main__stat.services-intro-section-main__card { min-height: 140px; }
+  .services-intro-section-main__card-title { max-width: none; font-size: 1.5rem; }
+}
 .services-intro-section-main__stat-number {
   font-weight: 600;
   font-size: max(48px, calc(76.6 * var(--a)));

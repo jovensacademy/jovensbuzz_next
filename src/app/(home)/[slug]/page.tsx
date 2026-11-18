@@ -40,9 +40,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return pageMetadata({ path: serviceHref(service.slug), title: service.seoTitle, description: service.seoDescription });
 }
 
-const TOOLKIT_LABELS = ["01", "02", "03", "04", "05"];
-const TOOLKIT_STEP_LABELS = ["Step one", "Step two", "Step three", "Step four", "Step five"];
-
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const service = findServicePage((await params).slug);
   if (!service) notFound();
@@ -59,15 +56,11 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           title={service.headline}
           description={service.tagline}
         />
-        <ServicesIntroSection description={service.intro} />
+        <ServicesIntroSection description={service.intro} cardTitles={service.cardTitles} />
         <ServicesStrategySection title={service.problem.title} paragraphs={[service.problem.text]} image={service.problem.image} />
         <ServicesIncludeSection
           description="Your service toolkit"
-          steps={service.toolkit.map((title, index) =>
-            service.toolkitDetails
-              ? { label: TOOLKIT_STEP_LABELS[index], title, text: service.toolkitDetails[index] }
-              : { label: TOOLKIT_LABELS[index], title },
-          )}
+          steps={service.toolkit.map((title, index) => ({ title, text: service.toolkitDetails[index] }))}
         />
         <ServicesListSection steps={service.steps} />
         {!service.hideOutcomeSection && <ServicesGallerySection title={service.outcome.title} description={service.outcome.text} />}

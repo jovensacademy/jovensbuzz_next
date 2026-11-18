@@ -117,13 +117,14 @@ const VALUES = [
 
 /** Values cards. The service pages reuse them under their own heading ("Why choose Jovens Buzz"). */
 export function AboutValuesSection({
+  artwork = false,
   eyebrow = "Our Values",
   title = "What we stand for",
   description = "The ideas that drive our creativity and help brands grow.",
-}: { eyebrow?: string; title?: string; description?: string } = {}) {
+}: { artwork?: boolean; eyebrow?: string; title?: string; description?: string } = {}) {
   return (
-    <section className="about-values-section-main" aria-labelledby="aboutValuesSectionMainTitle">
-      <div className="about-values-section-main__glow" aria-hidden="true">
+    <section className={artwork ? "about-values-section-main about-values-section-main--artwork" : "about-values-section-main"} aria-labelledby="aboutValuesSectionMainTitle">
+      {!artwork && <div className="about-values-section-main__glow" aria-hidden="true">
         <svg className="about-values-section-main__arcs" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice" focusable="false">
           <defs>
             <radialGradient id="aboutValuesGlow" cx="50%" cy="100%" r="60%">
@@ -144,7 +145,7 @@ export function AboutValuesSection({
             <ellipse cx="720" cy="560" rx="440" ry="130" strokeWidth="1.5" opacity=".35" />
           </g>
         </svg>
-      </div>
+      </div>}
       <div className="container-fluid about-values-section-main__container">
         <div className="about-values-section-main__header">
           <p className="about-values-section-main__eyebrow" data-aos="fade-up">
@@ -263,19 +264,18 @@ export function AboutFounderSection() {
         <div className="row about-founder-section-main__row">
           <div className="col-12 col-lg-6 about-founder-section-main__content" data-aos="fade-right">
             <h2 className="about-founder-section-main__title" id="aboutFounderSectionMainTitle">
-              Meet the Mind <span className="about-founder-section-main__title-accent">Behind Our Vision</span>
+              The Vision Behind <span className="about-founder-section-main__title-accent">the Buzz</span>
             </h2>
             <p className="about-founder-section-main__description">
-              With a vision for creativity, innovation, and meaningful growth, Venugopal Parameswaran Nair leads three ventures: Jovens
-              Buzz, Jovens Academy, and Jovens MedSolution.
+              With a vision rooted in creativity, innovation, and meaningful growth, Venugopal Parameswaran Nair leads Jovens Buzz,
+              helping businesses build a strong digital presence, strengthen their brand identity, and unlock new opportunities for growth.
             </p>
             <p className="about-founder-section-main__description">
-              Through Jovens Buzz, he empowers businesses to build their digital presence and grow their brands. Through Jovens Academy
-              and Jovens MedSolution, he extends his vision to education and healthcare, creating opportunities and delivering
-              meaningful impact.
+              Through Jovens Buzz, he brings together creative thinking, strategic vision, and a passion for helping businesses
+              evolve in an ever-changing digital landscape.
             </p>
             <p className="about-founder-section-main__signature">
-              <span className="about-founder-section-main__name">Venugopal Parameswaran Nair</span>
+              <span className="about-founder-section-main__name">Venugopal Parameswaran</span>
               <span className="about-founder-section-main__role">Founder &amp; CEO</span>
             </p>
           </div>
