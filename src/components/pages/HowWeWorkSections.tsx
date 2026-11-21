@@ -105,23 +105,33 @@ export function HowWeWorkProcessSection() {
   );
 }
 
+const cardImages = [
+  "/assets/images/how-we-1.png",
+  "/assets/images/how-we-2.png",
+  "/assets/images/how-we-3.png",
+  "/assets/images/how-we-4.png",
+  "/assets/images/how-we-5.png",
+  "/assets/images/how-we-6.png",
+  "/assets/images/how-we-7.png",
+];
+
 // Two columns scroll in opposite directions (left up, right down)
-const DELIVERABLES: { direction: "up" | "down"; cards: { title: string; text: string }[] }[] = [
+const DELIVERABLES: { direction: "up" | "down"; cards: { title: string; text: string; image: string }[] }[] = [
   {
     direction: "up",
     cards: [
-      { title: "Strategic Content Calendar", text: "Your month, planned in advance." },
-      { title: "Reels & Short-form Videos", text: "Video made to be watched." },
-      { title: "Engaging Caption", text: "Words that sound like you." },
-      { title: "Monthly Strategy Review", text: "A check-in to decide what comes next." },
+      { title: "Strategic Content Calendar", text: "Your month, planned in advance.", image: cardImages[0] },
+      { title: "Reels & Short-form Videos", text: "Video made to be watched.", image: cardImages[2] },
+      { title: "Engaging Caption", text: "Words that sound like you.", image: cardImages[4] },
+      { title: "Monthly Strategy Review", text: "A check-in to decide what comes next.", image: cardImages[6] },
     ],
   },
   {
     direction: "down",
     cards: [
-      { title: "Custom Designs", text: "Visuals made for your brand." },
-      { title: "Publishing & Scheduling", text: "Visuals made for your brand." },
-      { title: "Performance Insights", text: "Clear numbers on what is working." },
+      { title: "Custom Designs", text: "Visuals made for your brand.", image: cardImages[1] },
+      { title: "Publishing & Scheduling", text: "Visuals made for your brand.", image: cardImages[3] },
+      { title: "Performance Insights", text: "Clear numbers on what is working.", image: cardImages[5] },
     ],
   },
 ];
@@ -153,9 +163,13 @@ export function HowWeWorkDeliverablesSection() {
                       column.cards.map((card) => (
                         <li key={`${copy}-${card.title}`} className="how-we-work-deliverables-section-main__card" aria-hidden={copy || undefined}>
                           <span className="how-we-work-deliverables-section-main__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" focusable="false">
-                              <path d="M13 2 4.5 13.5H12L11 22l8.5-11.5H12z" />
-                            </svg>
+                            <Image
+                              src={card.image}
+                              alt=""
+                              width={29}
+                              height={29}
+                              style={{ objectFit: "contain" }}
+                            />
                           </span>
                           <span className="how-we-work-deliverables-section-main__card-body">
                             <span className="how-we-work-deliverables-section-main__card-title">{card.title}</span>

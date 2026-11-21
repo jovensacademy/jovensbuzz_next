@@ -902,7 +902,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 24px;
-  min-height: max(190px, calc(271 * var(--a)));
+  min-height: max(190px, calc(255 * var(--a)));
   padding: max(20px, calc(28.9 * var(--a)));
   border-radius: max(10px, calc(14.5 * var(--a)));
   background: #fff8f4;
@@ -919,7 +919,13 @@
   background: #fff;
   color: #f4761f;
 }
-.how-we-work-deliverables-section-main__icon svg { width: 53%; height: auto; }
+.how-we-work-deliverables-section-main__icon svg,
+.how-we-work-deliverables-section-main__icon img {
+  width: 53%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
 .how-we-work-deliverables-section-main__card-body { display: flex; flex-direction: column; gap: max(6px, calc(7.2 * var(--a))); }
 .how-we-work-deliverables-section-main__card-title {
   max-width: 11em;

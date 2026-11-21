@@ -192,6 +192,7 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: "brand-identity-branding",
     cardTitles: ["Logo Design","Brand Identity","Brand Guidelines"],
+    hideOutcomeSection: true,
     name: "Brand Identity & Branding",
     code: "Service 05 / Branding",
     seoTitle: "Brand Identity & Branding – Jovens Buzz",
