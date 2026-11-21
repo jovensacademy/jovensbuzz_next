@@ -97,7 +97,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     steps: [
       step("01", "Find the story", "We understand your audience, brand voice, offering and the questions customers already ask.", img("services/content-creation-step-1.png", "A team gathered around a table mapping ideas on sticky notes", 258, 276)),
       step("02", "Shape the idea", "We turn insights into useful angles, strong hooks and content concepts with a clear purpose.", img("services/content-creation-step-2.png", "A creator at her desk beneath a glowing lightbulb idea sketch", 258, 276)),
-      step("03", "Write and create", "We develop captions, scripts, carousel copy, campaign messages and other content suited to the format.", img("services/content-creation-step-3.png", "Team members brainstorming content around a table covered in notes", 258, 276)),
+      step("03", "Write and create", "We develop captions, scripts, carousel copy, campaign messages and other content suited to the format.", img("wright-img-new.png", "Team members brainstorming content around a table covered in notes", 258, 276)),
       step("04", "Polish for connection", "We refine the language, flow and call to action so every piece feels clear, natural and on-brand.", img("services/content-creation-step-4.png", "Hands at a laptop with the word Content on screen", 258, 276)),
     ],
     toolkit: ["Content ideas and themes", "Captions and social copy", "Reel and video scripts", "Carousel and campaign copy", "Brand messaging and storytelling"],
@@ -246,7 +246,7 @@ export const SERVICE_PAGES: ServicePage[] = [
       image: img("laptop-img.png", "A laptop displaying a responsive website design", 619, 675),
     },
     steps: [
-      step("01", "Plan the experience", "We understand your goals, audience, content needs and the actions visitors should take.", img("pl-1.png", "A strategist mapping a plan on a whiteboard for two colleagues", 464, 348)),
+      step("01", "Plan the experience", "We understand your goals, audience, content needs and the actions visitors should take.", img("Plan-the-experience.png", "A strategist mapping a plan on a whiteboard for two colleagues", 464, 348)),
       step("02", "Structure the pages", "We organise the information into a clear sitemap and page flow, with useful navigation and content hierarchy.", img("Structure-the-pages.png", "Team planning a campaign with charts, notes and sketches on a desk", 560, 560)),
       step("03", "Design and develop", "We bring the approved direction to life with responsive layouts and functional website elements.", img("Design-and-develop.png", "Hands typing on a laptop beside a coffee", 560, 560)),
       step("04", "Test and launch", "We check key pages and interactions across screen sizes, refine the experience and prepare the site for launch.", img("Test-and-launch.png", "A team analysing results charts during a meeting", 464, 348)),
